@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🃏 Flashcards</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="widget-root">
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="view active">
+      <div class="header">
+        <h1>🃏 Flashcards</h1>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-number" id="ready-count">0</div>
+          <div class="stat-label">Cartes prêtes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="streak-count">0</div>
+          <div class="stat-label">Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="today-count">0/0</div>
+          <div class="stat-label">Aujourd'hui</div>
+        </div>
+      </div>
+
+      <div class="next-session">
+        <div id="next-session-content">
+          <p style="opacity: 0.7; margin: 0; font-size: 0.9rem;">Chargement...</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="start-btn" class="btn btn-primary" disabled>
+          ▶️ Démarrer session
+        </button>
+        <button id="add-card-btn" class="btn btn-secondary">
+          ➕ Ajouter carte
+        </button>
+        <button id="import-btn" class="btn btn-secondary">
+          📥 Importer CSV
+        </button>
+        <button id="manage-btn" class="btn btn-secondary">
+          ⚙️ Gérer cartes
+        </button>
+      </div>
+    </div>
+
+    <!-- Review Session View -->
+    <div id="review-view" class="view">
+      <div class="review-header">
+        <div class="progress-bar">
+          <div class="progress-fill" id="session-progress"></div>
+        </div>
+        <div class="review-count" id="review-count">0/0</div>
+      </div>
+
+      <div class="card-container">
+        <div class="card" id="review-card">
+          <div class="card-front" id="card-front">
+            <p style="opacity: 0.7;">Chargement...</p>
+          </div>
+          <div class="card-back hidden" id="card-back">
+            <p style="opacity: 0.7;">Réponse...</p>
+          </div>
+          <button class="reveal-btn" id="reveal-btn">Révéler la réponse</button>
+        </div>
+      </div>
+
+      <div class="confidence-section hidden" id="confidence-section">
+        <p class="response-time" id="response-time">Temps: 0s</p>
+        <p style="margin-bottom: 12px; font-size: 0.9rem; opacity: 0.8;">Comment te sens-tu ?</p>
+        <div class="confidence-buttons">
+          <button class="conf-btn" data-confidence="1" title="Oubli total">😵<br><small>Oubli</small></button>
+          <button class="conf-btn" data-confidence="2" title="Hésitant">🧐<br><small>Hésitant</small></button>
+          <button class="conf-btn" data-confidence="3" title="Moyen">🙂<br><small>Moyen</small></button>
+          <button class="conf-btn" data-confidence="4" title="Je sais">👍<br><small>Je sais</small></button>
+          <button class="conf-btn" data-confidence="5" title="Automatique">🔥<br><small>Auto</small></button>
+        </div>
+      </div>
+
+      <div class="review-actions hidden" id="review-actions">
+        <button id="next-btn" class="btn btn-primary">Carte suivante</button>
+        <button id="skip-btn" class="btn btn-tertiary">Passer</button>
+        <button id="quit-btn" class="btn btn-tertiary">Quitter</button>
+      </div>
+    </div>
+
+    <!-- Add Card Modal -->
+    <div id="add-card-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>➕ Ajouter une carte</h2>
+          <button class="close-btn" id="close-add-modal">&times;</button>
+        </div>
+        <form id="add-card-form">
+          <div class="form-group">
+            <label for="card-front-input">Question (Front)</label>
+            <textarea id="card-front-input" placeholder="Ex: Quelle est la capitale de la France?" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="card-back-input">Réponse (Back)</label>
+            <textarea id="card-back-input" placeholder="Ex: Paris" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="card-tags-input">Tags (optionnel, séparés par ;)</label>
+            <input type="text" id="card-tags-input" placeholder="géographie; capitales">
+          </div>
+          <button type="submit" class="btn btn-primary">Créer carte</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Manage Cards Modal -->
+    <div id="manage-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>⚙️ Gérer cartes</h2>
+          <button class="close-btn" id="close-manage-modal">&times;</button>
+        </div>
+        <div class="manage-filters">
+          <input type="text" id="search-cards" placeholder="🔍 Chercher cartes...">
+        </div>
+        <div id="cards-list" style="max-height: 400px; overflow-y: auto;">
+          <!-- Cartes listées ici -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+  </div>
+
+  <!-- INLINE SCRIPTS -->
+  <script>
+    // === CONFIGURATION & INIT ===
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const config = JSON.parse(params.get('config') || '{}');
+
+    let _resolvedConfig = {};
+    const _configChangeCallbacks = [];
+
+    async function resolveConfig(rawConfig) {
+      rawConfig = rawConfig || config;
+      const resolved = {};
+      const varRefs = {};
+
+      for (const [key, val] of Object.entries(rawConfig)) {
+        if (typeof val === 'string' && val.startsWith('$var:')) {
+          const varName = val.replace('$var:', '');
+          varRefs[key] = varName;
+          resolved[key] = await getVar(varName);
+        } else {
+          resolved[key] = val;
+        }
+      }
+
+      for (const [key, varName] of Object.entries(varRefs)) {
+        watchVar(varName, (newValue) => {
+          _resolvedConfig[key] = newValue;
+          _configChangeCallbacks.forEach(cb => cb({ ..._resolvedConfig }, key, newValue));
+        });
+      }
+
+      _resolvedConfig = resolved;
+      return resolved;
+    }
+
+    function onConfigChange(callback) {
+      _configChangeCallbacks.push(callback);
+      return () => {
+        const idx = _configChangeCallbacks.indexOf(callback);
+        if (idx !== -1) _configChangeCallbacks.splice(idx, 1);
+      };
+    }
+
+    // === DB HELPERS ===
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+
+    async function sendNotification(options) {
+      const { title, message, type = 'widget', duration = 5000 } = options;
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/notify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, message, type, duration })
+      });
+      const result = await res.json();
+      if (window.parent) {
+        window.parent.postMessage({
+          type: 'widget-notification',
+          notification: {
+            title: title || result.notification.widgetName,
+            message,
+            type,
+            duration,
+            icon: result.notification.widgetEmoji
+          }
+        }, '*');
+      }
+      return result;
+    }
+
+    // === TAB VARIABLES ===
+    let _tabVariables = {};
+
+    async function loadTabVariables() {
+      try {
+        const res = await fetch(`/api/tabs/${tabId}/variables`);
+        _tabVariables = await res.json();
+        return _tabVariables;
+      } catch (err) {
+        console.error('Erreur variables:', err);
+        return {};
+      }
+    }
+
+    async function getVar(key) {
+      try {
+        const res = await fetch(`/api/tabs/${tabId}/variables/${key}`);
+        const data = await res.json();
+        return data.value;
+      } catch (err) {
+        console.error('Erreur getVar:', err);
+        return null;
+      }
+    }
+
+    async function setVar(key, value) {
+      try {
+        await fetch(`/api/tabs/${tabId}/variables/${key}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value })
+        });
+        _tabVariables[key] = value;
+        return true;
+      } catch (err) {
+        console.error('Erreur setVar:', err);
+        return false;
+      }
+    }
+
+    const _varWatchers = {};
+    function watchVar(key, callback) {
+      if (!_varWatchers[key]) _varWatchers[key] = [];
+      _varWatchers[key].push(callback);
+      return () => {
+        _varWatchers[key] = _varWatchers[key].filter(cb => cb !== callback);
+      };
+    }
+
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'tab-variable-changed') {
+        const { key, value } = event.data;
+        _tabVariables[key] = value;
+        if (_varWatchers[key]) {
+          _varWatchers[key].forEach(callback => callback(value, key));
+        }
+      }
+    });
+
+    loadTabVariables();
+  </script>
+
+  <!-- Load external scripts in order -->
+  <script src="assets/algorithms.js"></script>
+  <script src="assets/state.js"></script>
+  <script src="assets/ui.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

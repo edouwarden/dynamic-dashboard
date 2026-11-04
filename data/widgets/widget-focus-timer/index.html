@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus Timer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="focus">
+    <header class="head">
+      <div class="title"><span class="icon">◎</span><h1>Focus</h1></div>
+      <span class="sessions" id="sessions">0 today</span>
+    </header>
+
+    <div class="body">
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="track" cx="60" cy="60" r="52"></circle>
+          <circle class="progress" id="progress" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="readout">
+          <strong id="time">25:00</strong>
+          <span id="phase">focus</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="modes" id="modes">
+          <button class="active" data-seconds="1500" data-label="focus">25</button>
+          <button data-seconds="300" data-label="short">5</button>
+          <button data-seconds="900" data-label="long">15</button>
+        </div>
+
+        <div class="actions">
+          <button class="start" id="start">Start</button>
+          <button class="ghost" id="reset" title="Reset">↺</button>
+        </div>
+
+        <p class="hint" id="hint">One block at a time.</p>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

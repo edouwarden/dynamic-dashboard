@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Status</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="system">
+    <header class="head">
+      <div class="title"><span class="icon">▣</span><h1>System</h1></div>
+      <span class="state" id="state">—</span>
+    </header>
+
+    <div class="summary">
+      <div><strong id="ops">—</strong><span>operational</span></div>
+      <div><strong id="latency">—</strong><span>avg latency</span></div>
+      <div><strong id="uptime">—</strong><span>uptime</span></div>
+    </div>
+
+    <div class="list" id="list"></div>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+/* Style — Routine Matin */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--font-family, sans-serif);
+  color: var(--color-text, #1f2937);
+  background: var(--color-bg, #ffffff);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.header-left { display: flex; align-items: center; gap: 8px; }
+
+.header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary, #3b82f6);
+}
+
+.header-date {
+  font-size: 0.72rem;
+  opacity: 0.5;
+  font-weight: 500;
+}
+
+.btn-edit {
+  background: none;
+  border: 1px solid var(--color-primary, #3b82f6);
+  border-radius: var(--border-radius, 6px);
+  color: var(--color-primary, #3b82f6);
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.btn-edit:hover {
+  background: var(--color-primary, #3b82f6);
+  color: #fff;
+}
+
+/* ── Progress bar ── */
+.progress-wrap {
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+.progress-bar {
+  height: 5px;
+  background: color-mix(in srgb, var(--color-primary, #3b82f6) 15%, transparent);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-primary, #3b82f6);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progress-fill.done {
+  background: #22c55e;
+}
+
+/* ── Task list ── */
+.task-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 2px;
+}
+
+.task-list::-webkit-scrollbar { width: 3px; }
+.task-list::-webkit-scrollbar-track { background: transparent; }
+.task-list::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-primary, #3b82f6) 30%, transparent);
+  border-radius: 999px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px;
+  border-radius: var(--border-radius, 6px);
+  border: var(--border-width, 1px) var(--border-style, solid)
+    color-mix(in srgb, var(--color-text, #1f2937) 12%, transparent);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.2s;
+  user-select: none;
+}
+
+.task-item:hover {
+  background: color-mix(in srgb, var(--color-primary, #3b82f6) 6%, transparent);
+  border-color: color-mix(in srgb, var(--color-primary, #3b82f6) 40%, transparent);
+}
+
+.task-item.checked {
+  opacity: 0.55;
+  background: color-mix(in srgb, #22c55e 8%, transparent);
+  border-color: color-mix(in srgb, #22c55e 30%, transparent);
+}
+
+/* Checkbox custom */
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--color-text, #1f2937) 30%, transparent);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+  font-size: 0.65rem;
+}
+
+.task-item.checked .task-checkbox {
+  border-color: #22c55e;
+  background: #22c55e;
+  color: #fff;
+}
+
+.task-icon { font-size: 1rem; flex-shrink: 0; }
+
+.task-title {
+  flex: 1;
+  font-size: 0.82rem;
+  font-weight: 500;
+  transition: text-decoration 0.15s;
+}
+
+.task-item.checked .task-title {
+  text-decoration: line-through;
+}
+
+/* ── Edit mode ── */
+.task-item.edit-mode { cursor: default; }
+.task-item.edit-mode:hover { background: none; border-color: color-mix(in srgb, var(--color-text, #1f2937) 12%, transparent); }
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0 2px;
+  opacity: 0.7;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.btn-delete:hover { opacity: 1; }
+
+/* ── Add task form ── */
+.add-form {
+  display: none;
+  gap: 5px;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.add-form.visible { display: flex; }
+
+.add-icon-input {
+  width: 36px;
+  text-align: center;
+  font-size: 1rem;
+  padding: 5px 4px;
+  border: var(--border-width, 1px) var(--border-style, solid)
+    color-mix(in srgb, var(--color-text, #1f2937) 20%, transparent);
+  border-radius: var(--border-radius, 6px);
+  background: var(--color-bg, #fff);
+  color: var(--color-text, #1f2937);
+}
+
+.add-title-input {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 0.82rem;
+  border: var(--border-width, 1px) var(--border-style, solid)
+    color-mix(in srgb, var(--color-text, #1f2937) 20%, transparent);
+  border-radius: var(--border-radius, 6px);
+  background: var(--color-bg, #fff);
+  color: var(--color-text, #1f2937);
+  font-family: var(--font-family, sans-serif);
+}
+
+.add-title-input:focus,
+.add-icon-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.btn-add {
+  background: var(--color-primary, #3b82f6);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius, 6px);
+  padding: 5px 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+.btn-add:hover { opacity: 0.85; }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 16px;
+  opacity: 0.45;
+  font-size: 0.82rem;
+}
+
+/* ── All done banner ── */
+.all-done {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #22c55e;
+  padding: 4px 0;
+  flex-shrink: 0;
+}
+.all-done.visible { display: flex; }

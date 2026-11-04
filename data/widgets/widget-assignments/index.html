@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignments</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="assignments">
+    <header class="head">
+      <div class="title"><span class="icon">📚</span><h1>Assignments</h1></div>
+      <div class="stats">
+        <span class="stat"><b id="week">—</b>Due this week</span>
+        <span class="stat"><b id="done">—</b>Completed</span>
+      </div>
+    </header>
+    <div class="list" id="list"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const lang = params.get('lang') || document.documentElement.lang || 'en';
+
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

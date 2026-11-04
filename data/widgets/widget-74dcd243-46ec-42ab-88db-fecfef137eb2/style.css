@@ -1,0 +1,213 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-family, system-ui, sans-serif);
+  color: var(--color-text, #111);
+  background: var(--color-bg, #fff);
+  font-size: 13px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app {
+  height: 100%;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .35;
+}
+
+.btn-add {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  background: none;
+  color: inherit;
+  opacity: .35;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .15s;
+  line-height: 1;
+}
+.btn-add:hover { opacity: .8; }
+
+/* ── Global block ── */
+.global-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.global-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.global-score {
+  font-size: 32px;
+  font-weight: 200;
+  letter-spacing: -.02em;
+  line-height: 1;
+  transition: color .3s;
+}
+
+.global-label {
+  font-size: 11px;
+  opacity: .45;
+}
+
+/* ── Progress bar shared ── */
+.bar-track {
+  height: 6px;
+  background: currentColor;
+  opacity: .08;
+  border-radius: 3px;
+  position: relative;
+  overflow: visible;
+}
+
+.bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 3px;
+  transition: width .5s cubic-bezier(.4,0,.2,1), background .4s;
+  opacity: 1;
+}
+
+/* Global bar is taller */
+.global-block .bar-track { height: 8px; }
+
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: currentColor;
+  opacity: .07;
+}
+
+/* ── Sources list ── */
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.source-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.source-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.source-name {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: .5;
+  letter-spacing: .04em;
+}
+
+.source-score {
+  font-size: 12px;
+  font-weight: 600;
+  transition: color .3s;
+}
+
+/* ── Modal ── */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal.hidden { display: none; }
+
+.modal-box {
+  background: var(--color-bg, #fff);
+  border-radius: var(--border-radius, 6px);
+  width: min(300px, 90vw);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+}
+
+.modal-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .4;
+}
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; opacity: .45; }
+
+.field input,
+.field select {
+  background: none;
+  border: none;
+  border-bottom: 1px solid currentColor;
+  color: inherit;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 4px 0;
+  outline: none;
+  opacity: .6;
+  width: 100%;
+  transition: opacity .15s;
+}
+.field input:focus,
+.field select:focus { opacity: 1; }
+.field select option { background: var(--color-bg, #fff); color: var(--color-text, #111); }
+
+.slider-wrap { display: flex; align-items: center; gap: 10px; }
+.slider-wrap input[type=range] { flex: 1; accent-color: var(--color-primary, #2563eb); }
+.slider-val { font-size: 13px; font-weight: 600; width: 24px; text-align: center; }
+
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+
+.btn-cancel {
+  background: none; border: none; color: inherit;
+  font-family: inherit; font-size: 12px; opacity: .4; cursor: pointer; padding: 6px 10px;
+}
+.btn-cancel:hover { opacity: .7; }
+
+.btn-submit {
+  background: var(--color-primary, #2563eb);
+  color: #fff; border: none;
+  border-radius: var(--border-radius, 4px);
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  padding: 6px 14px; cursor: pointer; opacity: .9;
+}
+.btn-submit:hover { opacity: 1; }

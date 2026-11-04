@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Net Worth</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="worth">
+    <header class="head">
+      <div class="title"><span class="icon">🏦</span><h1>Net worth</h1></div>
+      <span class="pill" id="delta">—</span>
+    </header>
+
+    <div class="hero">
+      <strong id="net">—</strong>
+      <div class="split">
+        <span><i class="dot asset"></i>Assets <b id="assets">—</b></span>
+        <span><i class="dot debt"></i>Liabilities <b id="liabilities">—</b></span>
+      </div>
+    </div>
+
+    <div class="stack"><i id="assetBar"></i><i id="debtBar"></i></div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const lang = params.get('lang') || document.documentElement.lang || 'en';
+
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

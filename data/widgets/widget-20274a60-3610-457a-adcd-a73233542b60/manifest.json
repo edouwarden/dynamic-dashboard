@@ -1,0 +1,29 @@
+{
+  "widget": {
+    "id": "widget-20274a60-3610-457a-adcd-a73233542b60",
+    "name": "World Trend",
+    "emoji": "📊",
+    "description": "Country trend board with editable trend items backed by SQLite.",
+    "version": "1.0.0",
+    "createdAt": "2026-03-12T23:30:48.923Z",
+    "updatedAt": "2026-03-14T21:58:46.511Z",
+    "dbPermissions": [
+      {
+        "table": "trend_items",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "category": "trading"
+  },
+  "version": 3
+}

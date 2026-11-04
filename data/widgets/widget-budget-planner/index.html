@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="budget">
+    <header class="head">
+      <div class="title"><span class="icon">💳</span><h1>Budget</h1></div>
+      <span class="month" id="month">—</span>
+    </header>
+
+    <div class="summary">
+      <div class="fig">
+        <strong id="spent">—</strong>
+        <span>Spent</span>
+      </div>
+      <div class="meter"><i id="meter"></i></div>
+      <div class="fig right">
+        <strong id="remaining">—</strong>
+        <span>Remaining</span>
+      </div>
+    </div>
+
+    <div class="list" id="list"></div>
+
+    <footer>
+      <span id="count">—</span>
+      <span>of budget</span>
+    </footer>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const lang = params.get('lang') || document.documentElement.lang || 'en';
+
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

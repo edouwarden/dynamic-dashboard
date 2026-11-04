@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dashboard</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dashboard">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="stylesheet" href="/static/css/style.css?v=331">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">Dashboard</span>
+        </div>
+        <button class="btn-icon sidebar-toggle" id="sidebarToggle" title="Réduire le menu">◀</button>
+      </div>
+
+      <div class="tabs-section">
+        <div class="section-header">
+          <h3>Onglets</h3>
+          <button class="btn-icon" id="addTabBtn" title="Nouvel onglet">+</button>
+        </div>
+        <ul class="tabs-list" id="tabsList"></ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="sidebar-scripts-btn" id="scriptsSidebarBtn" title="Scripts globaux">
+          <span class="sidebar-scripts-icon">⚡</span>
+          <span class="sidebar-text">Scripts</span>
+        </button>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu">☰</button>
+        <div class="tab-title">
+          <h1 id="currentTabName">Sélectionner un onglet</h1>
+        </div>
+        <div class="header-actions" id="headerActions" style="display: none;">
+          <button class="btn btn-ghost lang-toggle" id="langToggleBtn" data-i18n-skip title="Switch to French">
+            <span aria-hidden="true">🌐</span>
+            <span class="lang-toggle-label">EN</span>
+          </button>
+          <button class="btn btn-ghost notification-bell" id="notificationBellBtn" title="Centre de notifications">
+            <span>🔔</span>
+            <span class="notification-bell-badge" id="notificationBellBadge" style="display:none"></span>
+          </button>
+          <button class="btn btn-ghost" id="privacyToggleBtn" title="Mode confidentialité">
+            <span>🔓</span>
+          </button>
+          <button class="btn btn-ghost" id="fullscreenModeBtn" title="Agrandir un widget">
+            <span>⛶</span>
+          </button>
+          <button class="btn btn-ghost" id="enterEditModeBtn" title="Mode édition">
+            <span>✏️</span>
+          </button>
+        </div>
+        <!-- Toolbar mode édition -->
+        <div class="edit-toolbar" id="editToolbar" style="display: none;">
+          <button class="btn btn-secondary" id="addWidgetBtn">
+            <span>📃</span> Liste des Widgets
+          </button>
+          <button class="btn btn-secondary" id="createWidgetBtn">
+            <span>🔧</span> Créer Widget
+          </button>
+          <button class="btn btn-secondary" id="styleConfigBtn">
+            <span>🎨</span> Style
+          </button>
+          <button class="btn btn-secondary" id="addPageBtnToolbar">
+            <span>➕</span> Ajouter Page
+          </button>
+          <button class="btn btn-secondary" id="tabSettingsBtn">
+            <span>⚙️</span> Paramètres
+          </button>
+          <button class="btn btn-secondary" id="dashboardOpenCodeBtn" title="Modifier le dashboard avec OpenCode">
+            <span>🤖</span> OpenCode
+          </button>
+          <button class="btn btn-accent" id="exitEditModeBtn">
+            <span>✅</span> Terminer
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard OpenCode Panel — slide-in depuis la droite -->
+      <div class="dashboard-opencode-overlay" id="dashboardOpenCodeOverlay" style="display: none;">
+        <div class="dashboard-opencode-panel" id="dashboardOpenCodePanel">
+          <div class="dashboard-opencode-header">
+            <span class="dashboard-opencode-title">🤖 OpenCode — Dashboard</span>
+            <button class="btn-icon" id="dashboardOpenCodePanelCloseBtn" title="Fermer">✕</button>
+          </div>
+          <div id="dashboardOpenCodePanelMount"></div>
+        </div>
+      </div>
+
+      <!-- Barre de navigation pages -->
+      <div class="pages-bar" id="pagesBar" style="display: none;">
+        <div class="pages-tabs" id="pagesTabs"></div>
+      </div>
+
+      <!-- Tab Notifications Container -->
+      <div id="tabNotificationContainer" class="tab-notification-container"></div>
+
+      <!-- Script editor view (plein écran) -->
+      <div class="script-editor-view" id="scriptEditorView" style="display: none;">
+        <div class="script-editor-full-layout">
+          <!-- Gauche : Monaco Editor -->
+          <div class="script-full-editor-panel">
+            <div class="script-editor-header">
+              <div class="script-editor-title">
+                <span id="globalScriptEditorEmoji">⚡</span>
+                <span id="globalScriptEditorName">Script</span>
+                <button type="button" id="globalScriptEditorId" class="script-id-badge" title="Copier l'ID"><span class="script-id-badge-text"></span> 📋</button>
+              </div>
+              <div class="script-editor-actions">
+                <button class="btn btn-sm" id="globalSaveScriptBtn">💾 Sauvegarder</button>
+                <button class="btn btn-sm btn-primary" id="globalRunScriptBtn">▶️ Exécuter</button>
+                <button class="btn btn-sm btn-danger" id="globalDeleteScriptBtn">🗑️</button>
+              </div>
+            </div>
+            <div id="globalScriptMonacoContainer" class="script-monaco-container script-monaco-full"></div>
+            <!-- Terminal de sortie -->
+            <div class="script-terminal" id="scriptTerminal">
+              <div class="script-terminal-bar">
+                <span class="script-terminal-title">▶ Output</span>
+                <button class="script-terminal-clear" id="scriptTerminalClearBtn" title="Vider">✕</button>
+              </div>
+              <div class="script-terminal-output" id="scriptTerminalOutput">
+                <span class="script-terminal-placeholder">Exécutez le script pour voir les logs ici...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Droite : Panneau latéral -->
+          <div class="script-full-side-panel">
+            <!-- Sous-onglets -->
+            <div class="script-subtabs" id="globalScriptSubtabs">
+              <button class="script-subtab active" data-subtab="opencode">💬 OpenCode</button>
+              <button class="script-subtab" data-subtab="triggers">⚡ Déclencheurs</button>
+              <button class="script-subtab" data-subtab="logs">📋 Logs</button>
+              <button class="script-subtab" data-subtab="permissions">🔐</button>
+              <button class="script-subtab" data-subtab="timeline">📅</button>
+              <button class="script-subtab" data-subtab="backups">💾</button>
+            </div>
+
+            <!-- Déclencheurs -->
+            <div class="script-subtab-content" data-subtab="triggers" style="display: none;">
+              <div class="script-config-section" style="flex:1;overflow-y:auto;">
+                <div class="script-config-header">
+                  <h4>⚡ Déclencheurs</h4>
+                  <label class="wt-toggle-option" style="margin: 0; padding: 0; border: none;">
+                    <span style="font-size: 12px; font-weight: 600;">Actif</span>
+                    <div class="wt-toggle-switch">
+                      <input type="checkbox" id="globalScriptEnabledToggle">
+                      <span class="wt-toggle-slider"></span>
+                    </div>
+                  </label>
+                </div>
+                <div id="globalScriptTriggersContainer" class="script-triggers"></div>
+                <button class="btn btn-sm btn-secondary" id="globalSaveScriptConfigBtn" style="margin-top: 8px; width: 100%;">Enregistrer la config</button>
+              </div>
+            </div>
+
+            <!-- OpenCode — généré par OpenCodePanel (script-manager/core.js) -->
+            <div class="script-subtab-content active" data-subtab="opencode" id="scriptOpenCodePanelMount"></div>
+
+            <!-- Logs -->
+            <div class="script-subtab-content" data-subtab="logs" style="display: none;">
+              <div class="script-logs-header">
+                <button class="btn btn-sm" id="globalRefreshScriptLogsBtn">🔄 Rafraîchir</button>
+                <button class="btn btn-sm" id="globalClearScriptLogsBtn">🗑️ Vider</button>
+              </div>
+              <div class="script-logs-list" id="globalScriptLogsList">
+                <p style="color: var(--text-secondary); text-align: center; padding: 20px;">Aucun log</p>
+              </div>
+            </div>
+
+            <!-- Permissions -->
+            <div class="script-subtab-content" data-subtab="permissions" style="display: none;">
+              <div class="script-permissions-panel" id="globalScriptPermissionsPanel">
+                <p style="color: var(--text-secondary); padding: 12px; font-size: 13px;">Chargement...</p>
+              </div>
+              <div style="padding: 8px; border-top: 1px solid var(--border-color); margin-top: 8px;">
+                <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                  <label style="font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                    <input type="checkbox" id="globalScriptAutoApproveCreate"> Auto-approuver création
+                  </label>
+                </div>
+                <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                  <label style="font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                    <input type="checkbox" id="globalScriptAutoApproveAlter"> Auto-approuver modification
+                  </label>
+                </div>
+                <button class="btn btn-sm btn-primary" id="globalSaveScriptPermissionsBtn" style="width: 100%;">Enregistrer les permissions</button>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="script-subtab-content" data-subtab="timeline" style="display: none;">
+              <div class="script-logs-header">
+                <button class="btn btn-sm" id="globalRefreshScriptTimelineBtn">🔄 Rafraîchir</button>
+              </div>
+              <div class="script-timeline" id="globalScriptTimeline">
+                <p style="color: var(--text-secondary); text-align: center; padding: 20px;">Aucune exécution</p>
+              </div>
+            </div>
+
+            <!-- Backups -->
+            <div class="script-subtab-content" data-subtab="backups" style="display: none;">
+              <div class="script-logs-header">
+                <button class="btn btn-sm" id="globalCreateScriptBackupBtn">💾 Créer backup</button>
+              </div>
+              <div class="script-logs-list" id="globalScriptBackupsList">
+                <p style="color: var(--text-secondary); text-align: center; padding: 20px;">Aucun backup</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab content area -->
+      <div class="content-area">
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-content">
+            <h2>Bienvenue sur le Dashboard</h2>
+            <p>Crée un nouvel onglet pour commencer</p>
+            <button class="btn btn-primary btn-lg" id="welcomeAddBtn">
+              + Créer un onglet
+            </button>
+          </div>
+        </div>
+
+        <div id="tabGridContainer" class="tab-grid-container" style="display: none;"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts Panel (overlay plein écran) -->
+  <div class="scripts-panel" id="scriptsPanel" style="display:none;">
+    <div class="scripts-panel-inner">
+      <div class="scripts-panel-header">
+        <div class="scripts-panel-title">
+          <span style="font-size:20px;">⚡</span>
+          <span>Scripts</span>
+        </div>
+        <div class="scripts-panel-actions">
+          <button class="btn btn-primary btn-sm" id="panelNewScriptBtn">+ Nouveau script</button>
+          <button class="btn-icon scripts-panel-close-btn" id="scriptsPanelCloseBtn" title="Fermer">✕</button>
+        </div>
+      </div>
+
+      <div class="scripts-panel-body">
+        <!-- Colonne gauche : catalogue scripts par catégorie -->
+        <div class="scripts-panel-catalog">
+          <div id="scriptsCatalog">
+            <div style="padding:20px; color:var(--text-muted); text-align:center; font-size:13px;">Chargement...</div>
+          </div>
+        </div>
+
+        <!-- Colonne droite : planning journalier 24h -->
+        <div class="scripts-panel-day-timeline">
+          <div class="scripts-day-timeline-header">
+            <div class="scripts-day-timeline-title">📅 Planning journalier</div>
+            <div class="scripts-day-timeline-hint">Glisser un script sur une heure pour le planifier</div>
+          </div>
+          <div class="scripts-day-grid" id="scriptsDayGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <!-- New Tab Modal -->
+  <div class="modal" id="newTabModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Nouvel onglet</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="tabName">Nom de l'onglet</label>
+          <input type="text" id="tabName" placeholder="Mon super projet" autofocus>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="createTabBtn">Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Tab Modal -->
+  <div class="modal" id="editTabModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✏️ Modifier l'onglet</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editTabName">Nom de l'onglet</label>
+          <input type="text" id="editTabName" placeholder="Mon super projet">
+        </div>
+        <div class="form-group">
+          <label>Emoji</label>
+          <div class="emoji-selector">
+            <button type="button" class="btn btn-ghost selected-emoji" id="selectedEmoji" title="Changer l'emoji">📄</button>
+            <div class="emoji-grid" id="emojiGrid"></div>
+          </div>
+        </div>
+
+        <!-- Variables partagées -->
+        <div class="form-group" style="margin-top: 20px;">
+          <label>🔗 Variables partagées entre widgets</label>
+          <p class="form-hint">Les widgets de cet onglet peuvent lire et modifier ces variables pour communiquer entre eux.</p>
+
+          <div class="tab-variables-list" id="tabVariablesList">
+            <!-- Les variables seront listées ici -->
+          </div>
+
+          <div class="tab-variables-add" style="display: flex; gap: 8px; margin-top: 12px;">
+            <input type="text" id="newVariableKey" placeholder="nom_variable" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+            <input type="text" id="newVariableValue" placeholder="valeur" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+            <button class="btn btn-sm btn-primary" id="addVariableBtn">+ Ajouter</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="saveTabBtn">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Database Modal -->
+  <div class="modal" id="databaseModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-xxl">
+      <div class="modal-header">
+        <div>
+          <h2>🗄️ Base de données SQLite</h2>
+          <p class="modal-subtitle">Gérez vos tables et explorez les données</p>
+        </div>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body db-modal-body">
+        <!-- Two column layout -->
+        <div class="db-layout">
+          <!-- Left side: Tables list -->
+          <div class="db-section">
+            <div class="db-section-header">
+              <h3>📊 Tables disponibles</h3>
+              <button class="btn btn-sm btn-primary" id="showCreateTableBtn">
+                + Nouvelle table
+              </button>
+            </div>
+            <div id="tablesList" class="db-tables-grid"></div>
+          </div>
+
+          <!-- Right side: Multiple views -->
+          <div class="db-section">
+            <!-- Info view (default) -->
+            <div id="permissionsView">
+              <div class="db-section-header">
+                <h3>📊 Informations</h3>
+              </div>
+              <div class="info-box">
+                <p>💡 <strong>Gestion de la base de données</strong></p>
+                <p>Cliquez sur une table à gauche pour explorer ses données ou modifier son schéma.</p>
+                <p>Les permissions pour les widgets se configurent dans les paramètres de chaque widget.</p>
+              </div>
+            </div>
+
+            <!-- Create table form (hidden by default) -->
+            <div id="createTableView" style="display: none;">
+              <div class="db-section-header">
+                <h3>➕ Créer une nouvelle table</h3>
+                <button class="btn btn-sm btn-secondary" id="cancelCreateTableBtn">
+                  Annuler
+                </button>
+              </div>
+              <div class="form-group">
+                <label for="newTableName">Nom de la table</label>
+                <input type="text" id="newTableName" placeholder="ma_table" class="form-input-lg">
+                <small class="form-hint">Minuscules, lettres, chiffres et underscores uniquement</small>
+              </div>
+
+              <!-- Column builder UI -->
+              <div class="column-builder">
+                <div class="column-builder-header">
+                  <label>Colonnes</label>
+                  <button type="button" class="btn btn-sm btn-secondary" id="addColumnBtn">+ Ajouter une colonne</button>
+                </div>
+                <div id="columnsContainer" class="columns-container">
+                  <!-- Les colonnes seront ajoutées dynamiquement ici -->
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" id="createTableBtn" style="margin-top: 16px;">
+                ✓ Créer la table
+              </button>
+            </div>
+
+            <!-- SQL Explorer view (hidden by default) -->
+            <div id="sqlExplorerView" style="display: none;">
+              <div class="db-section-header">
+                <h3>🔍 SQL Explorer</h3>
+                <div class="explorer-actions">
+                  <span id="explorerTableName" class="tab-badge"></span>
+                  <button class="btn btn-sm btn-secondary" id="closeExplorerBtn">Fermer</button>
+                </div>
+              </div>
+              <div class="explorer-toolbar">
+                <button class="btn btn-sm btn-primary" id="addRowBtn">+ Ajouter une ligne</button>
+                <button class="btn btn-sm btn-secondary" id="editTableSchemaBtn">⚙️ Modifier la table</button>
+                <button class="btn btn-sm btn-secondary" id="refreshExplorerBtn">🔄 Rafraîchir</button>
+              </div>
+              <div class="explorer-table-container">
+                <table class="explorer-table" id="explorerTable">
+                  <thead id="explorerTableHead"></thead>
+                  <tbody id="explorerTableBody"></tbody>
+                </table>
+              </div>
+              <div class="explorer-pagination" id="explorerPagination"></div>
+            </div>
+
+            <!-- Edit table schema view (hidden by default) -->
+            <div id="editTableView" style="display: none;">
+              <div class="db-section-header">
+                <h3>⚙️ Modifier la table</h3>
+                <button class="btn btn-sm btn-secondary" id="cancelEditTableBtn">Annuler</button>
+              </div>
+              <div id="editTableName" class="edit-table-name"></div>
+
+              <div class="current-schema">
+                <h4>Colonnes actuelles</h4>
+                <div id="currentColumnsContainer" class="current-columns-container"></div>
+              </div>
+
+              <div class="add-columns-section">
+                <h4>Ajouter des colonnes</h4>
+                <div id="newColumnsContainer" class="columns-container"></div>
+                <button type="button" class="btn btn-sm btn-secondary" id="addNewColumnBtn">+ Ajouter une colonne</button>
+              </div>
+
+              <button class="btn btn-primary btn-lg" id="saveTableChangesBtn" style="margin-top: 16px;">
+                ✓ Sauvegarder les modifications
+              </button>
+            </div>
+
+            <!-- Add/Edit row view (hidden by default) -->
+            <div id="editRowView" style="display: none;">
+              <div class="db-section-header">
+                <h3 id="editRowTitle">➕ Ajouter une ligne</h3>
+                <button class="btn btn-sm btn-secondary" id="cancelEditRowBtn">Annuler</button>
+              </div>
+              <div id="rowFormContainer" class="row-form-container"></div>
+              <button class="btn btn-primary btn-lg" id="saveRowBtn" style="margin-top: 16px;">
+                ✓ Sauvegarder
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backups Modal -->
+  <div class="modal" id="backupsModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h2>Sauvegardes</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="backups-actions">
+          <button class="btn btn-primary" id="createBackupBtn">
+            + Créer une sauvegarde
+          </button>
+        </div>
+        <div class="backups-list" id="backupsList"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Proposal Modal -->
+  <div class="modal" id="tableProposalModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📋 Proposition de table par OpenCode</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-box info-box-blue">
+          <p><strong>OpenCode souhaite créer une nouvelle table</strong></p>
+          <p id="proposalReason"></p>
+        </div>
+        <div class="form-group">
+          <label>Nom de la table</label>
+          <input type="text" id="proposalTableName" class="form-input-lg" readonly>
+        </div>
+        <div class="form-group">
+          <label>Schéma</label>
+          <textarea id="proposalTableSchema" class="form-input-lg" rows="4" readonly></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Refuser</button>
+        <button class="btn btn-primary" id="approveTableBtn">✓ Approuver et créer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Widget Instance Config Modal -->
+  <div class="modal" id="widgetInstanceConfigModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><span id="instanceConfigEmoji">🧩</span> <span id="instanceConfigName">Widget</span></h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="form-hint" id="instanceConfigDesc"></p>
+        <div id="instanceConfigFields"></div>
+        <div id="instanceConfigEmpty" style="display: none;">
+          <p style="color: var(--text-muted); text-align: center; padding: 20px 0;">Ce widget n'a pas de paramètres configurables.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="saveInstanceConfigBtn">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Menu (Tabs) -->
+  <div class="context-menu" id="contextMenu">
+    <button class="context-item" data-action="edit-emoji">😊 Changer l'emoji</button>
+    <button class="context-item" data-action="rename">✏️ Renommer</button>
+    <button class="context-item" data-action="settings">⚙️ Paramètres</button>
+    <button class="context-item" data-action="delete">🗑️ Supprimer</button>
+  </div>
+
+  <!-- Context Menu (Widgets) -->
+  <div class="context-menu" id="widgetContextMenu">
+    <button class="context-item" data-action="rename">✏️ Renommer</button>
+    <button class="context-item" data-action="change-emoji">😊 Changer l'icône</button>
+    <button class="context-item" data-action="edit">⚙️ Éditer le widget</button>
+    <button class="context-item" data-action="clone">🧬 Cloner le widget</button>
+  </div>
+
+  <!-- Widget Modals -->
+  <!-- Create Widget Modal -->
+  <div class="modal" id="createWidgetModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🔧 Créer un nouveau widget</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="widgetName">Nom du widget</label>
+          <input type="text" id="widgetName" placeholder="Graphique des capteurs" class="form-input-lg">
+        </div>
+        <div class="form-group">
+          <label>Emoji</label>
+          <div class="emoji-input-row">
+            <input type="hidden" id="widgetEmoji" value="📊">
+            <button type="button" class="btn btn-ghost emoji-input-preview" id="widgetEmojiPreview" title="Changer l'emoji">📊</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="saveWidgetBtn">Créer et ouvrir avec OpenCode</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Widget Modal -->
+  <div class="modal" id="editWidgetModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-edit-widget">
+      <div class="modal-header edit-widget-header">
+        <div class="edit-widget-title">
+          <span class="edit-widget-emoji" id="currentWidgetEmoji">🧩</span>
+          <div>
+            <h2 id="currentWidgetName"></h2>
+            <p class="modal-subtitle" id="currentWidgetDescription"></p>
+          </div>
+        </div>
+        <div class="edit-widget-header-actions">
+          <button class="btn-close">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <!-- Tabs -->
+        <div class="widget-tabs">
+          <button class="widget-tab active" data-tab="editor">💬 Éditer avec OpenCode</button>
+          <button class="widget-tab" data-tab="backups">💾 Backups</button>
+          <button class="widget-tab" data-tab="permissions">🔒 Permissions</button>
+          <button class="widget-tab" data-tab="settings">⚙️ Paramètres</button>
+        </div>
+
+        <!-- Editor Tab (Preview + OpenCode) -->
+        <div class="widget-tab-content widget-editor-tab active" data-tab="editor">
+          <div class="widget-editor-container">
+            <!-- Preview panel -->
+            <div class="editor-preview-panel">
+              <div class="preview-header">
+                <div class="preview-header-left">
+                  <h4>Aperçu</h4>
+                  <div class="preview-size-badge" id="previewSizeBadge" title="Résolution de l'aperçu"></div>
+                </div>
+                <div class="preview-actions">
+                  <button class="preview-action-btn" id="previewDevicePhone" title="Vue mobile">📱</button>
+                  <button class="preview-action-btn" id="previewDeviceTablet" title="Vue tablette">📟</button>
+                  <button class="preview-action-btn active" id="previewDeviceAuto" title="Taille réelle du widget">📐</button>
+                  <span class="preview-separator"></span>
+                  <button class="preview-action-btn" id="refreshPreviewBtn" title="Rafraîchir">🔄</button>
+                  <button class="preview-action-btn" id="openWidgetInNewTabBtn" title="Nouvel onglet">↗️</button>
+                </div>
+              </div>
+              <div class="preview-content">
+                <iframe id="widgetPreviewFrame" class="widget-preview-frame"></iframe>
+              </div>
+            </div>
+
+            <!-- OpenCode panel — généré par OpenCodePanel (dashboard/core.js) -->
+            <div class="editor-opencode-panel" id="widgetOpenCodePanelMount"></div>
+          </div>
+        </div>
+
+        <!-- Backups Tab -->
+        <div class="widget-tab-content" data-tab="backups" style="display: none;">
+          <div class="backups-actions">
+            <button class="btn btn-primary" id="createWidgetBackupBtn">
+              + Créer une sauvegarde
+            </button>
+          </div>
+          <div class="backups-list" id="widgetBackupsList"></div>
+        </div>
+
+        <!-- Permissions Tab -->
+        <div class="widget-tab-content" data-tab="permissions" style="display: none;">
+          <div class="db-layout">
+            <!-- Left side: Tables list -->
+            <div class="db-section wt-left-panel">
+              <div class="wt-panel-header">
+                <h3>🗄️ Tables de la base</h3>
+                <button class="btn btn-sm btn-primary" id="widgetShowCreateTableBtn">+ Créer</button>
+              </div>
+
+              <div class="wt-info-banner">
+                <span class="wt-info-icon">💡</span>
+                <span>Cliquez <strong>+</strong> pour assigner une table au widget, ou cliquez sur une table assignée pour l'explorer.</span>
+              </div>
+
+              <div id="widgetTablesList" class="wt-tables-list"></div>
+            </div>
+
+            <!-- Right side: Multiple views -->
+            <div class="db-section wt-right-panel">
+              <!-- Info view (default) -->
+              <div id="widgetPermissionsView">
+                <div class="wt-panel-header">
+                  <h3>🔒 Permissions & Options</h3>
+                </div>
+
+                <div class="wt-section-card">
+                  <div class="wt-section-title">📋 Résumé</div>
+                  <div id="widgetPermissionsSummary" class="wt-summary">
+                    <!-- Dynamically filled -->
+                  </div>
+                </div>
+
+                <div class="wt-section-card wt-opencode-options">
+                  <div class="wt-section-title">🤖 Options OpenCode</div>
+                  <p class="wt-section-desc">Contrôlez ce qu'OpenCode peut faire automatiquement avec la base de données.</p>
+
+                  <label class="wt-toggle-option">
+                    <div class="wt-toggle-info">
+                      <strong>Auto-créer des tables</strong>
+                      <span>OpenCode pourra créer de nouvelles tables sans demander votre approbation.</span>
+                    </div>
+                    <div class="wt-toggle-switch">
+                      <input type="checkbox" id="widgetAutoApproveCreateTable">
+                      <span class="wt-toggle-slider"></span>
+                    </div>
+                  </label>
+
+                  <label class="wt-toggle-option">
+                    <div class="wt-toggle-info">
+                      <strong>Auto-modifier des tables</strong>
+                      <span>OpenCode pourra ajouter/modifier des colonnes dans les tables existantes.</span>
+                    </div>
+                    <div class="wt-toggle-switch">
+                      <input type="checkbox" id="widgetAutoApproveAlterTable">
+                      <span class="wt-toggle-slider"></span>
+                    </div>
+                  </label>
+
+                  <div class="wt-hint">
+                    Si désactivé, OpenCode décrira les modifications nécessaires et attendra votre approbation.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Create table form (hidden by default) -->
+              <div id="widgetCreateTableView" style="display: none;">
+                <div class="wt-panel-header">
+                  <h3>➕ Nouvelle table</h3>
+                  <button class="btn btn-sm btn-secondary" id="widgetCancelCreateTableBtn">← Retour</button>
+                </div>
+
+                <div class="wt-section-card">
+                  <div class="form-group">
+                    <label for="widgetNewTableName">Nom de la table</label>
+                    <input type="text" id="widgetNewTableName" placeholder="ma_table" class="form-input-lg" style="font-family: monospace;">
+                    <small class="form-hint">Minuscules, lettres, chiffres et underscores uniquement</small>
+                  </div>
+
+                  <div class="column-builder">
+                    <div class="column-builder-header">
+                      <label style="font-weight: 600;">Colonnes</label>
+                      <button type="button" class="btn btn-sm btn-secondary" id="widgetAddColumnBtn">+ Colonne</button>
+                    </div>
+                    <div id="widgetColumnsContainer" class="columns-container"></div>
+                  </div>
+
+                  <label class="wt-toggle-option" style="margin-top: 16px; padding: 10px; background: var(--bg-secondary); border-radius: 8px;">
+                    <div class="wt-toggle-info">
+                      <strong>Assigner au widget</strong>
+                      <span>La table sera automatiquement assignée à ce widget après création.</span>
+                    </div>
+                    <div class="wt-toggle-switch">
+                      <input type="checkbox" id="widgetAssignTableAfterCreate" checked>
+                      <span class="wt-toggle-slider"></span>
+                    </div>
+                  </label>
+
+                  <button class="btn btn-primary btn-lg" id="widgetCreateTableBtn" style="margin-top: 16px; width: 100%;">
+                    ✓ Créer la table
+                  </button>
+                </div>
+              </div>
+
+              <!-- SQL Explorer view (hidden by default) -->
+              <div id="widgetSqlExplorerView" style="display: none;">
+                <div class="wt-panel-header">
+                  <h3>🔍 <span id="widgetExplorerTableName"></span></h3>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-sm btn-secondary" id="widgetRefreshExplorerBtn">🔄</button>
+                    <button class="btn btn-sm btn-secondary" id="widgetCloseExplorerBtn">← Retour</button>
+                  </div>
+                </div>
+                <div class="explorer-toolbar">
+                  <button class="btn btn-sm btn-primary" id="widgetAddRowBtn">+ Ajouter une ligne</button>
+                  <button class="btn btn-sm btn-secondary" id="widgetEditTableSchemaBtn">⚙️ Modifier le schéma</button>
+                </div>
+                <div class="explorer-table-container">
+                  <table class="explorer-table" id="widgetExplorerTable">
+                    <thead id="widgetExplorerTableHead"></thead>
+                    <tbody id="widgetExplorerTableBody"></tbody>
+                  </table>
+                </div>
+                <div class="explorer-pagination" id="widgetExplorerPagination"></div>
+              </div>
+
+              <!-- Edit table schema view (hidden by default) -->
+              <div id="widgetEditTableView" style="display: none;">
+                <div class="wt-panel-header">
+                  <h3>⚙️ Modifier le schéma</h3>
+                  <button class="btn btn-sm btn-secondary" id="widgetCancelEditTableBtn">← Retour</button>
+                </div>
+
+                <div class="wt-section-card">
+                  <div id="widgetEditTableName" class="edit-table-name" style="margin-bottom: 16px;"></div>
+
+                  <div class="current-schema">
+                    <h4 style="margin-bottom: 8px;">Colonnes actuelles</h4>
+                    <div id="widgetCurrentColumnsContainer" class="current-columns-container"></div>
+                  </div>
+
+                  <div class="add-columns-section" style="margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <h4>Ajouter des colonnes</h4>
+                      <button type="button" class="btn btn-sm btn-secondary" id="widgetAddNewColumnBtn">+ Colonne</button>
+                    </div>
+                    <div id="widgetNewColumnsContainer" class="columns-container"></div>
+                  </div>
+
+                  <button class="btn btn-primary btn-lg" id="widgetSaveTableChangesBtn" style="margin-top: 16px; width: 100%;">
+                    ✓ Sauvegarder les modifications
+                  </button>
+                </div>
+              </div>
+
+              <!-- Add/Edit row view (hidden by default) -->
+              <div id="widgetEditRowView" style="display: none;">
+                <div class="wt-panel-header">
+                  <h3 id="widgetEditRowTitle">➕ Ajouter une ligne</h3>
+                  <button class="btn btn-sm btn-secondary" id="widgetCancelEditRowBtn">← Retour</button>
+                </div>
+                <div class="wt-section-card">
+                  <div id="widgetRowFormContainer" class="row-form-container"></div>
+                  <button class="btn btn-primary btn-lg" id="widgetSaveRowBtn" style="margin-top: 16px; width: 100%;">
+                    ✓ Sauvegarder
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="widget-tab-content" data-tab="settings" style="display: none;">
+          <!-- Header: Emoji + Name + ID -->
+          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #e5e7eb;">
+            <div class="emoji-input-row" style="margin: 0;">
+              <input type="hidden" id="editWidgetEmoji" value="📊">
+              <button type="button" class="btn btn-ghost emoji-input-preview" id="editWidgetEmojiPreview" title="Changer l'emoji">📊</button>
+            </div>
+            <div style="flex: 1;">
+              <input type="text" id="editWidgetName" class="form-input-lg" placeholder="Nom du widget" style="margin: 0;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="color: #9ca3af; font-size: 11px; font-weight: 500;">ID:</span>
+              <button type="button" id="copyWidgetIdBtn" class="widget-id-chip" title="Copier l'ID du widget">
+                <code id="editWidgetId" style="font-size: 11px;">—</code>
+              </button>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="editWidgetDescription">Description</label>
+            <textarea id="editWidgetDescription" rows="3" class="form-input-lg"></textarea>
+          </div>
+
+          <!-- Notifications -->
+          <div class="form-group">
+            <label>🔔 Notifications</label>
+            <div class="checkbox-container" style="margin-bottom: 10px;">
+              <input type="checkbox" id="editWidgetCanSendGlobalNotifications" />
+              <label for="editWidgetCanSendGlobalNotifications">Notifications globales (visibles partout)</label>
+            </div>
+            <div class="checkbox-container">
+              <input type="checkbox" id="editWidgetCanSendTabNotifications" />
+              <label for="editWidgetCanSendTabNotifications">Notifications par onglet (visibles uniquement sur l'onglet actif)</label>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+              Les widgets autorisés peuvent afficher des notifications toast à l'utilisateur (alertes, erreurs, etc.)
+            </p>
+          </div>
+
+          <button class="btn btn-primary" id="saveWidgetSettingsBtn">
+            Sauvegarder les paramètres
+          </button>
+          <div style="margin-top: 32px; padding-top: 32px; border-top: 2px solid #fee;">
+            <h3 style="color: #dc2626;">⚠️ Zone dangereuse</h3>
+            <button class="btn btn-danger" id="deleteWidgetBtn">
+              🗑️ Supprimer ce widget
+            </button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Widget to Tab Modal -->
+  <div class="modal" id="addWidgetModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-xl">
+      <div class="modal-header">
+        <h2>➕ Ajouter un widget</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 0;">
+        <div class="widget-gallery-layout">
+          <!-- Sidebar avec catégories -->
+          <div class="widget-gallery-sidebar">
+            <div class="widget-search-container">
+              <input type="text" id="widgetSearchInput" class="widget-search-input" placeholder="🔍 Rechercher...">
+            </div>
+            <div class="widget-categories" id="widgetCategoriesList">
+              <!-- Catégories générées dynamiquement -->
+            </div>
+          </div>
+          <!-- Grille de widgets -->
+          <div class="widget-gallery-content">
+            <div id="widgetsGallery" class="widgets-gallery"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Categories Modal -->
+  <div class="modal" id="manageCategoriesModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-md">
+      <div class="modal-header">
+        <h2>⚙️ Gérer les catégories</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-box" style="margin-bottom: 16px;">
+          <p>💡 Les catégories "Tous les widgets" et "Autres" ne peuvent pas être modifiées</p>
+        </div>
+
+        <div id="categoriesList" style="margin-bottom: 16px;">
+          <!-- Liste des catégories générée dynamiquement -->
+        </div>
+
+        <button class="btn btn-primary" id="addCategoryBtn" style="width: 100%;">
+          ➕ Ajouter une catégorie
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Style Config Modal -->
+  <div class="modal" id="styleConfigModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h2>🎨 Style de l'onglet</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Presets — carrousel horizontal -->
+        <div class="style-presets-bar">
+          <div class="style-presets-header">
+            <input type="text" id="presetSearchInput" class="preset-search-input" placeholder="🔍 Rechercher un preset...">
+            <button class="btn btn-sm btn-secondary" id="savePresetBtn">💾 Sauvegarder</button>
+          </div>
+          <div class="preset-carousel" id="presetDropdown">
+            <!-- Chargé dynamiquement -->
+          </div>
+        </div>
+
+        <!-- Layout : contrôles + preview côte à côte -->
+        <div class="style-config-layout">
+          <div class="style-config-controls">
+
+            <!-- Section Couleurs -->
+            <div class="style-section">
+              <div class="style-section-header">🎨 Couleurs</div>
+              <div class="style-colors-grid">
+                <div class="form-group">
+                  <label for="stylePrimaryColor">Primaire</label>
+                  <div class="color-input-group">
+                    <input type="color" id="stylePrimaryColor" class="color-picker">
+                    <input type="text" id="stylePrimaryColorText" class="color-text form-input-lg" placeholder="#60a5fa">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="styleSecondaryColor">Secondaire</label>
+                  <div class="color-input-group">
+                    <input type="color" id="styleSecondaryColor" class="color-picker">
+                    <input type="text" id="styleSecondaryColorText" class="color-text form-input-lg" placeholder="#a78bfa">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="styleBackgroundColor">Fond</label>
+                  <div class="color-input-group">
+                    <input type="color" id="styleBackgroundColor" class="color-picker">
+                    <input type="text" id="styleBackgroundColorText" class="color-text form-input-lg" placeholder="#111827">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="styleTextColor">Texte</label>
+                  <div class="color-input-group">
+                    <input type="color" id="styleTextColor" class="color-picker">
+                    <input type="text" id="styleTextColorText" class="color-text form-input-lg" placeholder="#f3f4f6">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section Typographie -->
+            <div class="style-section">
+              <div class="style-section-header">✏️ Typographie</div>
+              <div class="form-group">
+                <label for="styleFontFamily">Police</label>
+                <select id="styleFontFamily" class="form-input-lg">
+                  <option value="Inter, sans-serif">Inter</option>
+                  <option value="'Roboto', sans-serif">Roboto</option>
+                  <option value="'Poppins', sans-serif">Poppins</option>
+                  <option value="'Open Sans', sans-serif">Open Sans</option>
+                  <option value="'Montserrat', sans-serif">Montserrat</option>
+                  <option value="system-ui, sans-serif">System UI</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Section Bordures & Ombres -->
+            <div class="style-section">
+              <div class="style-section-header">🔲 Bordures & Ombres</div>
+              <div class="style-borders-grid">
+                <div class="form-group">
+                  <label for="styleBorderStyle">Style</label>
+                  <select id="styleBorderStyle" class="form-input-lg">
+                    <option value="solid">Solide</option>
+                    <option value="dashed">Pointillés</option>
+                    <option value="dotted">Points</option>
+                    <option value="none">Aucune</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="styleBorderWidth">Épaisseur</label>
+                  <select id="styleBorderWidth" class="form-input-lg">
+                    <option value="0px">Aucune</option>
+                    <option value="1px">Fine (1px)</option>
+                    <option value="2px">Moyenne (2px)</option>
+                    <option value="3px">Épaisse (3px)</option>
+                    <option value="4px">Très épaisse (4px)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="styleBorderRadius">Rayon</label>
+                  <select id="styleBorderRadius" class="form-input-lg">
+                    <option value="0px">Carré (0px)</option>
+                    <option value="4px">Léger (4px)</option>
+                    <option value="8px">Arrondi (8px)</option>
+                    <option value="12px">Très arrondi (12px)</option>
+                    <option value="16px">Très arrondi (16px)</option>
+                    <option value="24px">Cercle (24px)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="styleShadowStyle">Ombres</label>
+                  <select id="styleShadowStyle" class="form-input-lg">
+                    <option value="none">Aucune</option>
+                    <option value="light">Légères</option>
+                    <option value="medium">Moyennes</option>
+                    <option value="heavy">Fortes</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Preview — toujours visible -->
+          <div class="style-config-preview">
+            <div class="style-section-header">Aperçu</div>
+            <div id="stylePreview" class="style-preview">
+              <div class="style-preview-card">
+                <h4>Widget exemple</h4>
+                <p>Aperçu du style configuré pour vos widgets.</p>
+                <button class="preview-btn">Bouton</button>
+              </div>
+            </div>
+            <!-- Toggle interface globale sous l'aperçu -->
+            <div style="display: flex; align-items: center; gap: 12px; margin-top: 16px;">
+              <label class="wt-toggle-switch" style="flex-shrink: 0;">
+                <input type="checkbox" id="styleApplyToShell">
+                <span class="wt-toggle-slider"></span>
+              </label>
+              <label for="styleApplyToShell" style="cursor: pointer; font-size: 13px; color: var(--text-secondary);">
+                Appliquer le thème à la sidebar et au header
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="saveStyleBtn">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toasts Container -->
+  <div id="notificationContainer" class="notification-container"></div>
+
+  <!-- Notification Center Panel -->
+  <div class="notif-center-panel" id="notificationCenterPanel">
+    <div class="notif-center-header">
+      <h3>Notifications</h3>
+      <div class="notif-center-actions">
+        <button class="btn-icon" id="notifMarkAllReadBtn" title="Tout marquer comme lu">✓</button>
+        <button class="btn-icon" id="notifClearReadBtn" title="Supprimer les lues">🗑</button>
+      </div>
+    </div>
+    <div class="notif-center-list" id="notificationCenterList">
+      <div class="notif-center-empty">Aucune notification</div>
+    </div>
+  </div>
+
+  <!-- Create Script Modal -->
+  <div class="modal" id="createScriptModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚡ Nouveau script global</h2>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Emoji</label>
+          <div class="emoji-input-row">
+            <input type="hidden" id="newScriptEmoji" value="⚡">
+            <span class="emoji-input-preview" id="newScriptEmojiPreview">⚡</span>
+            <button class="btn btn-sm btn-secondary" id="pickNewScriptEmojiBtn">Changer</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="newScriptName">Nom du script</label>
+          <input type="text" id="newScriptName" placeholder="Mon script de données" autofocus>
+        </div>
+        <div class="form-group">
+          <label for="newScriptDescription">Description (optionnel)</label>
+          <input type="text" id="newScriptDescription" placeholder="Ce script fait...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-cancel">Annuler</button>
+        <button class="btn btn-primary" id="confirmCreateScriptBtn">Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+  <script type="module" src="/static/js/app.js?v=331"></script>
+</body>
+</html>

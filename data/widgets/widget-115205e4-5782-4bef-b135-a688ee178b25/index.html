@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Tracking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="date-nav">
+      <button class="btn-icon" id="prevDay" title="Jour précédent">←</button>
+      <input type="date" id="currentDate" class="date-picker">
+      <button class="btn-icon" id="nextDay" title="Jour suivant">→</button>
+      <button class="btn-icon" id="today" title="Aujourd'hui">📅</button>
+    </div>
+    <button class="btn-primary" id="addMetricBtn">+ Métrique</button>
+  </div>
+
+  <!-- Metrics Grid -->
+  <div class="metrics-grid" id="metricsGrid">
+    <!-- Metrics will be populated here -->
+  </div>
+
+  <!-- Modal: Add/Edit Metric -->
+  <div class="modal" id="metricModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="metricModalTitle">Nouvelle métrique</h2>
+        <button class="btn-close" id="closeMetricModal">×</button>
+      </div>
+      <form id="metricForm">
+        <input type="hidden" id="metricId">
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" id="metricName" required placeholder="ex: Poids, VO2 Max...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Unité</label>
+            <input type="text" id="metricUnit" required placeholder="ex: kg, bpm">
+          </div>
+          <div class="form-group">
+            <label>Icône</label>
+            <input type="text" id="metricIcon" placeholder="📊">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Couleur</label>
+            <input type="color" id="metricColor" value="#3b82f6">
+          </div>
+          <div class="form-group">
+            <label>Objectif</label>
+            <input type="number" step="0.01" id="metricTarget" placeholder="optionnel">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancelMetric">Annuler</button>
+          <button type="submit" class="btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add/Edit Value -->
+  <div class="modal" id="valueModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="valueModalTitle">Ajouter une valeur</h2>
+        <button class="btn-close" id="closeValueModal">×</button>
+      </div>
+      <form id="valueForm">
+        <input type="hidden" id="valueMetricId">
+        <input type="hidden" id="valueStatId">
+        <div class="form-group">
+          <label id="valueLabel">Valeur</label>
+          <input type="number" step="0.01" id="valueInput" required autofocus>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="valueNotes" rows="3" placeholder="Optionnel..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancelValue">Annuler</button>
+          <button type="submit" class="btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Chart -->
+  <div class="modal" id="chartModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="chartModalTitle">Graphique</h2>
+        <button class="btn-close" id="closeChartModal">×</button>
+      </div>
+      <div class="chart-controls">
+        <select id="chartPeriod">
+          <option value="7">7 jours</option>
+          <option value="14">14 jours</option>
+          <option value="30" selected>30 jours</option>
+          <option value="90">90 jours</option>
+          <option value="365">1 an</option>
+        </select>
+      </div>
+      <canvas id="chartCanvas"></canvas>
+      <div class="chart-stats" id="chartStats"></div>
+    </div>
+  </div>
+
+  <script>
+    // Récupérer la config depuis l'URL
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const config = JSON.parse(params.get('config') || '{}');
+
+    // Helper queryDB injecté automatiquement
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

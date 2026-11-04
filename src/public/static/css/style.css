@@ -1,0 +1,25 @@
+/*
+ * Point d'entrée CSS — importe tous les modules
+ *
+ * variables.css      – CSS custom properties + reset global
+ * layout.css         – dashboard, sidebar, tabs, header, edit toolbar, buttons
+ * modals.css         – content area, modals, modal éditeur widget
+ * forms.css          – forms, emoji selector, backups
+ * chat.css           – terminal, chat interface, processing, messages
+ * database.css       – db modal, permissions, proposals, column builder, explorer, row form
+ * widgets.css        – widget grid, gallery, opencode panel dans l'éditeur
+ * notifications.css  – notifications toast, tab vars, animations, emoji picker universel
+ * scripts.css        – section scripts sidebar + éditeur plein écran + planning
+ * polish.css         – micro-interactions, transitions, fullscreen, reduced motion
+ */
+
+@import './variables.css?v=331';
+@import './layout.css?v=331';
+@import './modals.css?v=331';
+@import './forms.css?v=331';
+@import './chat.css?v=331';
+@import './database.css?v=331';
+@import './widgets.css?v=331';
+@import './notifications.css?v=331';
+@import './scripts.css?v=331';
+@import './polish.css?v=331';

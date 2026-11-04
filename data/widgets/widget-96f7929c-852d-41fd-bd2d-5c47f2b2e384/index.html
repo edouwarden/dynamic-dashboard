@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="notes-app">
+    <div class="header">
+      <h1>📝 Notes</h1>
+      <button id="addNote" class="btn-add">+ Nouvelle note</button>
+    </div>
+    <div id="notesContainer" class="notes-container"></div>
+  </div>
+
+  <script>
+    // Récupérer la config depuis l'URL
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const config = JSON.parse(params.get('config') || '{}');
+
+    // Helper queryDB injecté automatiquement
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+
+    console.log('Widget Notes loaded');
+    console.log('Config:', config);
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

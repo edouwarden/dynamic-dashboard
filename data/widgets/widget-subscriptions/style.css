@@ -1,0 +1,37 @@
+:root {
+  --bg: var(--color-bg, #0b1120);
+  --text: var(--color-text, #e5e7eb);
+  --muted: #94a3b8;
+  --line: rgba(148, 163, 184, 0.16);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  background: radial-gradient(240px 150px at 0% 0%, rgba(34, 211, 238, 0.1), transparent 65%), var(--bg);
+  color: var(--text);
+  font-family: var(--font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+}
+.subs { height: 100%; display: flex; flex-direction: column; padding: 11px 12px 9px; }
+.head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.title { display: flex; align-items: center; gap: 7px; }
+.icon {
+  display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px;
+  background: rgba(34, 211, 238, 0.12); border: 1px solid rgba(34, 211, 238, 0.26); font-size: 11px;
+}
+h1 { margin: 0; font-size: 12px; font-weight: 600; }
+.monthly { text-align: right; display: flex; flex-direction: column; }
+.monthly strong { font-size: 15px; font-weight: 650; letter-spacing: -0.02em; }
+.monthly span { font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.list { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 16px; align-content: center; overflow: hidden; }
+.row { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 4px 3px; border-radius: 7px; }
+.row:hover { background: rgba(148, 163, 184, 0.06); }
+.emoji { font-size: 12px; width: 16px; text-align: center; }
+.meta { flex: 1; min-width: 0; }
+.name { display: block; font-size: 10px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.next { display: block; font-size: 8px; color: var(--muted); }
+.price { font-size: 10px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+footer { display: flex; justify-content: space-between; padding-top: 7px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; }
+footer span:first-child { color: var(--text); font-weight: 600; }
+.empty { grid-column: 1 / -1; display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 11px; }

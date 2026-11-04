@@ -1,0 +1,51 @@
+{
+  "widget": {
+    "id": "widget-608ac591-55d2-4aa4-9196-f4c9e432368c",
+    "name": "Routine",
+    "emoji": "✅",
+    "description": "Morning and evening checklists backed by the shared task tables.",
+    "version": "1.0.0",
+    "createdAt": "2026-02-27T10:10:20.552Z",
+    "updatedAt": "2026-03-02T10:41:48.736Z",
+    "dbPermissions": [
+      {
+        "table": "morning_tasks",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "evening_tasks",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      }
+    ],
+    "configSchema": {
+      "mode": {
+        "type": "select",
+        "label": "Mode de routine",
+        "options": [
+          "matin",
+          "soir"
+        ],
+        "default": "matin",
+        "description": "Affiche la routine du matin ou du soir"
+      }
+    },
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "category": "personal",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 7
+}

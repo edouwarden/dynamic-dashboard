@@ -1,0 +1,21 @@
+{
+  "widget": {
+    "id": "widget-2772fa56-37bd-43fd-ac13-74da78650e42",
+    "name": "Word of the Day",
+    "emoji": "📖",
+    "description": "Daily word card with pronunciation, definition and an example sentence.",
+    "version": "1.0.0",
+    "createdAt": "2026-03-01T21:24:05.167Z",
+    "updatedAt": "2026-03-14T21:59:34.738Z",
+    "dbPermissions": [],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "category": "personal",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 3
+}

@@ -1,0 +1,73 @@
+/* Variables */
+:root {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #252542;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
+  --text-muted: #6a6a7a;
+  --accent-primary: #00d4ff;
+  --accent-secondary: #7b2cbf;
+  --accent-gradient: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+  --success: #00c853;
+  --warning: #ffab00;
+  --danger: #ff5252;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --sidebar-width: 260px;
+  --header-height: 60px;
+  /* Sidebar - dérivées du style tab actif */
+  --sidebar-bg: #1a1a2e;
+  --sidebar-bg-hover: #252542;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-text: #a0a0b0;
+  --sidebar-text-muted: #6a6a7a;
+  --sidebar-accent: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+  --sidebar-accent-color: #00d4ff;
+  --sidebar-accent-shadow: rgba(0, 212, 255, 0.25);
+  /* Header - dérivées du style tab actif */
+  --header-bg: transparent;
+  --header-border: rgba(255, 255, 255, 0.1);
+  --header-text: #ffffff;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* GPU-accelerated smooth animations partout */
+*,
+*::before,
+*::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  animation: bodyFadeIn 0.4s ease-out;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS : empêcher le zoom auto sur focus des inputs (< 16px = zoom) */
+@supports (-webkit-touch-callout: none) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+@keyframes bodyFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

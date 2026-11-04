@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="assistant">
+    <header class="head">
+      <div class="identity">
+        <span class="avatar">✦</span>
+        <div>
+          <h1>AI Assistant</h1>
+          <p>Widget copilot · local context</p>
+        </div>
+      </div>
+      <span class="mock">MOCK</span>
+    </header>
+
+    <div class="messages" id="messages" aria-live="polite">
+      <div class="msg assistant">
+        <div class="bubble">
+          <p>Hi — I can explain the dashboard, the widget API or this demo's seeded data. Everything here runs locally.</p>
+          <p class="muted">No API key, no model call, no filesystem access.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chips" id="chips">
+      <button data-prompt="Summarise the finance data">Finance data</button>
+      <button data-prompt="How does the widget API work?">Widget API</button>
+      <button data-prompt="Plan a 25 minute focus block">Plan focus</button>
+      <button data-prompt="Show system health">System health</button>
+    </div>
+
+    <form class="composer" id="composer">
+      <textarea id="input" rows="1" placeholder="Ask about this dashboard…" autocomplete="off"></textarea>
+      <button type="submit" id="send" title="Send">↑</button>
+    </form>
+
+    <p class="disclaimer">Demo replies are canned. The real project can route this panel to a local OpenCode runtime.</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const tabId = params.get('tabId') || '';
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

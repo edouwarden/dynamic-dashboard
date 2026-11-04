@@ -1,0 +1,121 @@
+{
+  "widget": {
+    "id": "widget-1199fbe6-a8f2-4ff6-8366-189fb41d6d12",
+    "name": "Life Calendar",
+    "emoji": "🗓️",
+    "description": "Life-in-weeks view with eras, milestones, objectives and side quests.",
+    "version": "1.0.0",
+    "createdAt": "2026-02-28T13:52:35.283Z",
+    "updatedAt": "2026-03-14T22:00:38.120Z",
+    "dbPermissions": [
+      {
+        "table": "life_eras",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_milestones",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_objectives",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_sidequests",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_events",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_chores",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_routines",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_routine_blocks",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_routine_assignments",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_time_blocks",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "life_era_images",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "autoApproveCreateTable": true,
+    "autoApproveAlterTable": true,
+    "category": "personal"
+  },
+  "version": 16
+}

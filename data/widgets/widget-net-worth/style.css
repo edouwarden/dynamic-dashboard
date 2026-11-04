@@ -1,0 +1,53 @@
+:root {
+  --bg: var(--color-bg, #0b1120);
+  --text: var(--color-text, #e5e7eb);
+  --muted: #94a3b8;
+  --accent: var(--color-primary, #34d399);
+  --line: rgba(148, 163, 184, 0.16);
+  --debt: #fb7185;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  background:
+    radial-gradient(260px 160px at 0% 0%, rgba(52, 211, 153, 0.12), transparent 65%),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.worth { height: 100%; display: flex; flex-direction: column; padding: 12px 13px 10px; }
+.head { display: flex; align-items: center; justify-content: space-between; }
+.title { display: flex; align-items: center; gap: 7px; }
+.icon {
+  display: grid; place-items: center; width: 25px; height: 25px; border-radius: 8px;
+  background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.28); font-size: 12px;
+}
+h1 { margin: 0; font-size: 12px; font-weight: 600; }
+.pill { padding: 3px 8px; border-radius: 999px; background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.26); color: #6ee7b7; font-size: 9px; }
+
+.hero { margin: 10px 0 8px; }
+.hero > strong { display: block; font-size: 25px; font-weight: 650; letter-spacing: -0.035em; }
+.split { display: flex; gap: 16px; margin-top: 4px; color: var(--muted); font-size: 9px; }
+.split span { display: flex; align-items: center; gap: 5px; }
+.split b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.dot { width: 6px; height: 6px; border-radius: 999px; display: inline-block; }
+.dot.asset { background: #34d399; }
+.dot.debt { background: var(--debt); }
+
+.stack { display: flex; height: 7px; border-radius: 999px; overflow: hidden; background: rgba(148, 163, 184, 0.12); }
+.stack i { display: block; height: 100%; transition: width .5s ease; }
+#assetBar { background: linear-gradient(90deg, #34d399, #22d3ee); }
+#debtBar { background: var(--debt); }
+
+.list { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; align-content: center; margin-top: 8px; overflow: hidden; }
+.item { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 4px 3px; border-radius: 7px; }
+.item:hover { background: rgba(148, 163, 184, 0.06); }
+.item .ico { font-size: 12px; width: 16px; text-align: center; }
+.item .nm { flex: 1; min-width: 0; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item .vl { font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.item.liability .vl { color: #fda4af; }
+.empty { grid-column: 1 / -1; display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 11px; }

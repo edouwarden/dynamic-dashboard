@@ -1,0 +1,21 @@
+{
+  "widget": {
+    "id": "widget-96f7929c-852d-41fd-bd2d-5c47f2b2e384",
+    "name": "Notes",
+    "emoji": "📝",
+    "description": "Quick notes with local persistence and search from the widget gallery.",
+    "version": "1.0.0",
+    "createdAt": "2026-02-08T12:16:58.923Z",
+    "updatedAt": "2026-03-02T10:42:28.933Z",
+    "dbPermissions": [],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "autoApproveCreateTable": false,
+    "autoApproveAlterTable": false,
+    "category": "tools"
+  },
+  "version": 10
+}

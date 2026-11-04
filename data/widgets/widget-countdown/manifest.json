@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-countdown",
+    "name": "Countdown",
+    "emoji": "⏳",
+    "description": "Upcoming dates with a next-event hero, days remaining and a progress bar.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "updatedAt": "2026-11-03T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "countdown_events",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 7,
+      "rows": 4
+    },
+    "category": "school",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

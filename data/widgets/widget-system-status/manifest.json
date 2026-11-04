@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-system-status",
+    "name": "System Status",
+    "emoji": "🛰️",
+    "description": "Service health, latency and uptime for the local stack.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-02T00:00:00.000Z",
+    "updatedAt": "2026-11-02T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "system_services",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 8,
+      "rows": 5
+    },
+    "category": "tools",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

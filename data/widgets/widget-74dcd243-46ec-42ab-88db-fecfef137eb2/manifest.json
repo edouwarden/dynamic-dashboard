@@ -1,0 +1,29 @@
+{
+  "widget": {
+    "id": "widget-74dcd243-46ec-42ab-88db-fecfef137eb2",
+    "name": "Market Sentiment",
+    "emoji": "🌡️",
+    "description": "Manual sentiment log with a gauge and recent entries.",
+    "version": "1.0.0",
+    "createdAt": "2026-03-13T00:05:53.535Z",
+    "updatedAt": "2026-03-14T21:56:05.902Z",
+    "dbPermissions": [],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "features": [
+      "Multi-source sentiment tracking (Twitter, Reddit, YouTube, Trends)",
+      "Real-time sentiment score visualization",
+      "Sentiment distribution charts",
+      "Per-source sentiment breakdown",
+      "Engagement metrics tracking",
+      "Interactive add/remove sentiment items",
+      "Local data persistence",
+      "Responsive design with mobile support"
+    ],
+    "category": "trading"
+  },
+  "version": 3
+}

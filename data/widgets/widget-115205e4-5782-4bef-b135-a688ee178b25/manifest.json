@@ -1,0 +1,60 @@
+{
+  "widget": {
+    "id": "widget-115205e4-5782-4bef-b135-a688ee178b25",
+    "name": "Daily Tracking",
+    "emoji": "📊",
+    "description": "Daily metric tracker with custom metrics and entry history.",
+    "version": "1.0.0",
+    "createdAt": "2026-02-12T22:38:36.746Z",
+    "updatedAt": "2026-03-02T10:41:55.982Z",
+    "dbPermissions": [
+      {
+        "table": "metrics",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "metric_entries",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "scriptConfig": {
+      "enabled": false,
+      "triggers": [
+        {
+          "type": "cron",
+          "enabled": true,
+          "cron": "*/1 * * * *"
+        },
+        {
+          "type": "manual",
+          "enabled": true
+        },
+        {
+          "type": "widget-load",
+          "enabled": false
+        },
+        {
+          "type": "webhook",
+          "enabled": false
+        }
+      ]
+    },
+    "category": "personal"
+  },
+  "version": 62
+}

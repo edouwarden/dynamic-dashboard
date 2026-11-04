@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-grade-tracker",
+    "name": "Grade Tracker",
+    "emoji": "🎓",
+    "description": "Weighted course averages, credits and an overall grade with letter bands.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "updatedAt": "2026-11-03T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "school_grades",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 10,
+      "rows": 6
+    },
+    "category": "school",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

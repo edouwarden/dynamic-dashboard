@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-class-timetable",
+    "name": "Class Timetable",
+    "emoji": "🗓️",
+    "description": "Monday–Friday class schedule with times, rooms and today's highlight.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "updatedAt": "2026-11-03T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "school_classes",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 10,
+      "rows": 7
+    },
+    "category": "school",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

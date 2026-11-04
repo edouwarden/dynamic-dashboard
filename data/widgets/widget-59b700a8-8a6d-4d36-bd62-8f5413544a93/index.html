@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Price Chart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="widget-root">
+    <div id="chart-header" style="display:none">
+      <span id="chart-title-text"></span>
+      <div id="chart-tooltip-wrapper" style="display:none">
+        <span class="info-icon">i</span>
+        <div class="chart-tooltip-popup"></div>
+      </div>
+    </div>
+    <div id="chart-container">
+      <div id="tradingview-widget"></div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const config = JSON.parse(params.get('config') || '{}');
+
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+
+    async function sendNotification(options) {
+      const { title, message, type = 'widget', duration = 5000, scope = 'global' } = options;
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/notify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, message, type, duration })
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      if (window.parent) {
+        window.parent.postMessage({
+          type: 'widget-notification',
+          notification: { title: title || result.notification.widgetName, message, type, duration, icon: result.notification.widgetEmoji, scope }
+        }, '*');
+      }
+      return result;
+    }
+
+    let _tabVariables = {};
+    async function loadTabVariables() {
+      try {
+        const res = await fetch(`/api/tabs/${tabId}/variables`);
+        _tabVariables = await res.json();
+        return _tabVariables;
+      } catch (err) { return {}; }
+    }
+
+    async function getVar(key) {
+      try {
+        const res = await fetch(`/api/tabs/${tabId}/variables/${key}`);
+        const data = await res.json();
+        return data.value;
+      } catch (err) { return null; }
+    }
+
+    async function setVar(key, value) {
+      try {
+        await fetch(`/api/tabs/${tabId}/variables/${key}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value })
+        });
+        _tabVariables[key] = value;
+        return true;
+      } catch (err) { return false; }
+    }
+
+    const _varWatchers = {};
+    function watchVar(key, callback) {
+      if (!_varWatchers[key]) _varWatchers[key] = [];
+      _varWatchers[key].push(callback);
+      return () => { _varWatchers[key] = _varWatchers[key].filter(cb => cb !== callback); };
+    }
+
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'tab-variable-changed') {
+        const { key, value } = event.data;
+        _tabVariables[key] = value;
+        if (_varWatchers[key]) _varWatchers[key].forEach(cb => cb(value, key));
+      }
+    });
+
+    loadTabVariables();
+
+    // Résoudre la config : remplace les références $var:xxx par les valeurs réelles
+    let _resolvedConfig = {};
+    const _configChangeCallbacks = [];
+
+    async function resolveConfig(rawConfig) {
+      rawConfig = rawConfig || config;
+      const resolved = {};
+      const varRefs = {};
+      for (const [key, val] of Object.entries(rawConfig)) {
+        if (typeof val === 'string' && val.startsWith('$var:')) {
+          const varName = val.replace('$var:', '');
+          varRefs[key] = varName;
+          resolved[key] = await getVar(varName);
+        } else {
+          resolved[key] = val;
+        }
+      }
+      for (const [key, varName] of Object.entries(varRefs)) {
+        watchVar(varName, (newValue) => {
+          _resolvedConfig[key] = newValue;
+          _configChangeCallbacks.forEach(cb => cb({ ..._resolvedConfig }, key, newValue));
+        });
+      }
+      _resolvedConfig = resolved;
+      return resolved;
+    }
+
+    function onConfigChange(callback) {
+      _configChangeCallbacks.push(callback);
+      return () => {
+        const idx = _configChangeCallbacks.indexOf(callback);
+        if (idx !== -1) _configChangeCallbacks.splice(idx, 1);
+      };
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

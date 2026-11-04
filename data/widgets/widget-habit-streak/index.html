@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habit Streak</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="habits">
+    <header class="head">
+      <div class="title"><span class="flame">🔥</span><h1>Habits</h1></div>
+      <span class="rate" id="rate">—</span>
+    </header>
+    <div class="weekdays" aria-hidden="true">
+      <span></span><span></span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span><span></span>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

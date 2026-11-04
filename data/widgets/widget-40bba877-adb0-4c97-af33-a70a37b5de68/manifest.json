@@ -1,0 +1,34 @@
+{
+  "widget": {
+    "id": "widget-40bba877-adb0-4c97-af33-a70a37b5de68",
+    "name": "Morning Dew",
+    "emoji": "📻",
+    "description": "Morning playlist with a rotating quote, driven by per-tab configuration.",
+    "version": "1.1.0",
+    "createdAt": "2026-03-01T21:39:26.765Z",
+    "updatedAt": "2026-03-14T21:59:26.274Z",
+    "dbPermissions": [],
+    "configSchema": {
+      "videos": {
+        "type": "string",
+        "label": "URLs YouTube",
+        "description": "Liste des URLs YouTube séparées par ||| (pas de retour à la ligne)",
+        "placeholder": "https://www.youtube.com/watch?v=dQw4w9WgXcQ|||https://youtu.be/9bZkp7q19f0|||jNQXAC9IVRw",
+        "isLongText": true
+      },
+      "quotes": {
+        "type": "string",
+        "label": "Citations inspirantes",
+        "description": "Liste des citations séparées par |||. Doit avoir le même nombre que les vidéos",
+        "placeholder": "\"Le début est la moitié de l'œuvre.\" - Aristote|||\"Fais ce qui est difficile quand il est facile.\" - Confucius|||\"L'avenir appartient à ceux qui croient à la beauté de leurs rêves.\" - Eleanor Roosevelt",
+        "isLongText": true
+      }
+    },
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "category": "personal"
+  },
+  "version": 2
+}

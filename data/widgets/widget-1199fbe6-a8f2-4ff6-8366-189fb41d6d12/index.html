@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Calendar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="widget-root">
+
+  <!-- ── Header ─────────────────────────────── -->
+  <div class="vie-header">
+    <div class="vie-title">🌍 Calendrier de Vie <small>2000 – 2200</small></div>
+    <div class="header-actions">
+      <button class="btn btn-sm" onclick="openEraModal()">+ Ère</button>
+      <button class="btn btn-sm" onclick="openMilestoneModal()">+ Étape</button>
+    </div>
+  </div>
+
+  <!-- ── Eras Legend ─────────────────────────── -->
+  <div class="eras-legend" id="eras-legend"></div>
+
+  <!-- ── Timeline ────────────────────────────── -->
+  <div class="timeline-wrap">
+    <div id="life-timeline"></div>
+  </div>
+
+  <!-- ── Year context menu ─────────────────── -->
+  <div id="year-menu" class="hidden"></div>
+
+  <!-- ── Drag indicator ────────────────────── -->
+  <div id="drag-indicator"></div>
+
+  <!-- ── Era Modal ─────────────────────────── -->
+  <div class="modal-overlay hidden" id="era-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="era-modal-title">🌅 Nouvelle ère</span>
+        <button class="modal-close" onclick="closeEraModal()">×</button>
+      </div>
+
+      <div class="form-group">
+        <label>Nom *</label>
+        <input id="era-name" class="form-control" type="text"
+          placeholder="ex: Étudiant Paris, Famille autonome campagne…">
+      </div>
+
+      <div class="form-group">
+        <label>Description <span style="opacity:.5">(vision, ambiance, qui tu es dans cette période)</span></label>
+        <textarea id="era-desc" class="form-control"
+          placeholder="Ce qui définit cette période de ta vie…"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Début (année) *</label>
+          <input id="era-start" class="form-control" type="number" min="2000" max="2200" placeholder="2026">
+        </div>
+        <div class="form-group">
+          <label>Mois de début</label>
+          <select id="era-start-month" class="form-control">
+            <option value="1">Janvier</option>
+            <option value="2">Février</option>
+            <option value="3">Mars</option>
+            <option value="4">Avril</option>
+            <option value="5">Mai</option>
+            <option value="6">Juin</option>
+            <option value="7">Juillet</option>
+            <option value="8">Août</option>
+            <option value="9">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fin (année) <span style="opacity:.5">optionnel</span></label>
+          <input id="era-end" class="form-control" type="number" min="2000" max="2200" placeholder="2032">
+        </div>
+        <div class="form-group">
+          <label>Mois de fin</label>
+          <select id="era-end-month" class="form-control">
+            <option value="1">Janvier</option>
+            <option value="2">Février</option>
+            <option value="3">Mars</option>
+            <option value="4">Avril</option>
+            <option value="5">Mai</option>
+            <option value="6">Juin</option>
+            <option value="7">Juillet</option>
+            <option value="8">Août</option>
+            <option value="9">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Couleur</label>
+        <div id="era-color-picker" class="color-picker-grid"></div>
+        <input id="era-color" type="hidden" value="#6366f1">
+      </div>
+
+      <div class="form-group">
+        <label>Image principale <span style="opacity:.4">(depuis le vision board)</span></label>
+        <input id="era-image" type="hidden" value="">
+        <div id="era-image-selector" class="era-image-selector">
+          <div class="era-image-preview-wrapper">
+            <img id="era-preview" class="era-image-preview" alt="Aperçu de l'ère">
+            <div class="era-preview-empty">Aucune image sélectionnée</div>
+          </div>
+          <div id="era-image-gallery" class="era-image-gallery"></div>
+        </div>
+      </div>
+
+      <!-- Multi-images vision board -->
+      <div class="form-group" style="margin-top:12px">
+        <label>🖼️ Vision Board <span style="opacity:.4">(images d'inspiration pour cette ère)</span></label>
+        <div id="era-images-grid" class="era-images-grid"></div>
+        <div class="drop-zone" id="era-drop-zone">
+          <div class="drop-zone-content">
+            <div class="drop-icon">📁</div>
+            <div>Glisse des images ici ou <label class="drop-browse">parcourir<input type="file" accept="image/*" multiple hidden onchange="handleFileSelect(this.files)"></label></div>
+          </div>
+        </div>
+        <div class="era-images-add-row">
+          <input id="era-new-image-url" class="form-control" type="url"
+            placeholder="URL d'une image d'inspiration…" style="flex:1">
+          <input id="era-new-image-caption" class="form-control" type="text"
+            placeholder="Légende (optionnel)" style="flex:0.6">
+          <button class="btn btn-sm" type="button" onclick="addEraImage()">+ Ajouter</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:10px">
+        <label class="form-check">
+          <input id="era-current" type="checkbox">
+          <span>C'est mon ère actuelle ✨</span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-danger btn-sm" id="era-delete-btn"
+          onclick="deleteEra()" style="display:none">🗑 Supprimer</button>
+        <div class="modal-actions-right">
+          <button class="btn btn-ghost btn-sm" onclick="closeEraModal()">Annuler</button>
+          <button class="btn btn-primary btn-sm" onclick="saveEra()">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Vision Board Modal ────────────────── -->
+  <div class="modal-overlay hidden" id="vision-modal">
+    <div class="modal-box vision-modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="vision-modal-title">🖼️ Vision Board</span>
+        <button class="modal-close" onclick="closeVisionModal()">×</button>
+      </div>
+      <div class="vision-header-row">
+        <div class="vision-header-left">
+          <span class="vision-img-count" id="vision-img-count"></span>
+        </div>
+        <div class="vision-header-actions">
+          <button class="btn btn-ghost btn-sm" onclick="toggleFullscreenVision()" id="vision-fs-btn" title="Plein écran">⛶</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeVisionModal();openEraModal(visionBoardEraId)" title="Modifier l'ère">✏️</button>
+        </div>
+      </div>
+      <div id="vision-era-desc" class="vision-era-desc"></div>
+      <div class="drop-zone vision-drop-zone" id="vision-drop-zone">
+        <div class="drop-zone-content">
+          <div class="drop-icon">📁</div>
+          <div>Glisse des images ici ou <label class="drop-browse">parcourir<input type="file" accept="image/*" multiple hidden onchange="handleVisionFileDrop(this.files)"></label></div>
+        </div>
+      </div>
+      <div class="vision-scroll">
+        <div id="vision-board" class="vision-board"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Milestone Modal ───────────────────── -->
+  <div class="modal-overlay hidden" id="milestone-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="ms-modal-title">📌 Nouvelle étape de vie</span>
+        <button class="modal-close" onclick="closeMilestoneModal()">×</button>
+      </div>
+
+      <div class="form-group">
+        <label>Titre *</label>
+        <input id="ms-title" class="form-control" type="text"
+          placeholder="ex: Diplôme ingénieur, Mariage, 1er enfant…">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="ms-desc" class="form-control"
+          placeholder="Quelques mots sur ce moment…"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date *</label>
+          <input id="ms-date" class="form-control" type="date">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="ms-type" class="form-control">
+            <option value="achievement">🏆 Achievement</option>
+            <option value="family">👨‍👩‍👧 Famille</option>
+            <option value="career">💼 Carrière</option>
+            <option value="education">🎓 Éducation</option>
+            <option value="love">❤️ Amour</option>
+            <option value="travel">✈️ Voyage</option>
+            <option value="health">💪 Santé</option>
+            <option value="other">⭐ Autre</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row" style="align-items:flex-start">
+        <div class="form-group" style="flex:0 0 64px">
+          <label>Icône</label>
+          <div id="ms-icon-display" class="icon-display">🏆</div>
+          <input id="ms-icon-val" type="hidden" value="🏆">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label>Choisir</label>
+          <div id="emoji-grid" class="emoji-grid"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="flex:0 0 auto">
+          <label>Couleur</label>
+          <input id="ms-color" class="form-control" type="color" value="#f59e0b" style="width:60px">
+        </div>
+        <div class="form-group">
+          <label>Ère associée</label>
+          <select id="ms-era" class="form-control"></select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-check">
+          <input id="ms-achieved" type="checkbox">
+          <span>Déjà accompli ✅</span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-danger btn-sm" id="ms-delete-btn"
+          onclick="deleteMilestone()" style="display:none">🗑 Supprimer</button>
+        <div class="modal-actions-right">
+          <button class="btn btn-ghost btn-sm" onclick="closeMilestoneModal()">Annuler</button>
+          <button class="btn btn-primary btn-sm" onclick="saveMilestone()">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const instanceId = params.get('instanceId');
+  const tabId = params.get('tabId');
+  const config = JSON.parse(params.get('config') || '{}');
+
+  let _resolvedConfig = {};
+  const _configChangeCallbacks = [];
+
+  async function resolveConfig(rawConfig) {
+    rawConfig = rawConfig || config;
+    const resolved = {};
+    const varRefs = {};
+    for (const [key, val] of Object.entries(rawConfig)) {
+      if (typeof val === 'string' && val.startsWith('$var:')) {
+        const varName = val.replace('$var:', '');
+        varRefs[key] = varName;
+        resolved[key] = await getVar(varName);
+      } else {
+        resolved[key] = val;
+      }
+    }
+    for (const [key, varName] of Object.entries(varRefs)) {
+      watchVar(varName, (newValue) => {
+        _resolvedConfig[key] = newValue;
+        _configChangeCallbacks.forEach(cb => cb({ ..._resolvedConfig }, key, newValue));
+      });
+    }
+    _resolvedConfig = resolved;
+    return resolved;
+  }
+
+  function onConfigChange(callback) {
+    _configChangeCallbacks.push(callback);
+    return () => {
+      const idx = _configChangeCallbacks.indexOf(callback);
+      if (idx !== -1) _configChangeCallbacks.splice(idx, 1);
+    };
+  }
+
+  async function queryDB(query) {
+    const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query)
+    });
+    const result = await res.json();
+    if (!result.success) throw new Error(result.error);
+    return result.data;
+  }
+
+  async function sendNotification(options) {
+    const { title, message, type = 'widget', duration = 5000, scope = 'global' } = options;
+    const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/notify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, message, type, duration })
+    });
+    const result = await res.json();
+    if (!result.success) throw new Error(result.error);
+    if (window.parent) {
+      window.parent.postMessage({
+        type: 'widget-notification',
+        notification: { title: title || result.notification.widgetName, message, type, duration, icon: result.notification.widgetEmoji, scope }
+      }, '*');
+    }
+    return result;
+  }
+
+  let _tabVariables = {};
+  async function loadTabVariables() {
+    try {
+      const res = await fetch(`/api/tabs/${tabId}/variables`);
+      _tabVariables = await res.json();
+      return _tabVariables;
+    } catch (err) { return {}; }
+  }
+  async function getVar(key) {
+    try {
+      const res = await fetch(`/api/tabs/${tabId}/variables/${key}`);
+      const data = await res.json();
+      return data.value;
+    } catch (err) { return null; }
+  }
+  async function setVar(key, value) {
+    try {
+      await fetch(`/api/tabs/${tabId}/variables/${key}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value })
+      });
+      _tabVariables[key] = value;
+      return true;
+    } catch (err) { return false; }
+  }
+  const _varWatchers = {};
+  function watchVar(key, callback) {
+    if (!_varWatchers[key]) _varWatchers[key] = [];
+    _varWatchers[key].push(callback);
+    return () => { _varWatchers[key] = _varWatchers[key].filter(cb => cb !== callback); };
+  }
+  window.addEventListener('message', (event) => {
+    if (event.data.type === 'tab-variable-changed') {
+      const { key, value } = event.data;
+      _tabVariables[key] = value;
+      if (_varWatchers[key]) _varWatchers[key].forEach(cb => cb(value, key));
+    }
+  });
+  loadTabVariables();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

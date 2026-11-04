@@ -1,0 +1,498 @@
+/**
+ * Gestionnaire de presets de style personnalisés
+ */
+
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import { existsSync } from 'fs';
+import { join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { CONFIG } from '../config';
+import type { TabStyle } from '../types';
+
+export interface StylePreset {
+  id: string;
+  name: string;
+  style: TabStyle;
+  isDefault?: boolean;
+  createdAt: string;
+  category?: string; // Catégorie pour l'organisation
+}
+
+interface PresetsData {
+  presets: StylePreset[];
+}
+
+export class PresetManager {
+  private presetsFile: string;
+
+  constructor() {
+    this.presetsFile = join(CONFIG.DATA_DIR, 'style-presets.json');
+  }
+
+  async init(): Promise<void> {
+    await mkdir(CONFIG.DATA_DIR, { recursive: true });
+
+    // Créer le fichier avec les presets par défaut s'il n'existe pas
+    if (!existsSync(this.presetsFile)) {
+      const defaultPresets: PresetsData = {
+        presets: this.getDefaultPresets()
+      };
+      await writeFile(this.presetsFile, JSON.stringify(defaultPresets, null, 2));
+      console.log('✅ Presets par défaut créés');
+    }
+  }
+
+  private getDefaultPresets(): StylePreset[] {
+    const now = new Date().toISOString();
+
+    return [
+      {
+        id: 'modern',
+        name: '🔵 Modern Blue',
+        isDefault: true,
+        category: 'light',
+        createdAt: now,
+        style: {
+          colorPrimary: '#3b82f6',
+          colorSecondary: '#8b5cf6',
+          colorBackground: '#ffffff',
+          colorText: '#1f2937',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '12px',
+          borderStyle: 'solid',
+          borderWidth: '1px',
+          shadowStyle: 'medium'
+        }
+      },
+      {
+        id: 'dark',
+        name: '🌙 Dark Mode',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#60a5fa',
+          colorSecondary: '#a78bfa',
+          colorBackground: '#111827',
+          colorText: '#f3f4f6',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '8px',
+          borderStyle: 'solid',
+          borderWidth: '1px',
+          shadowStyle: 'heavy'
+        }
+      },
+      {
+        id: 'light',
+        name: '☀️ Light & Clean',
+        isDefault: true,
+        category: 'light',
+        createdAt: now,
+        style: {
+          colorPrimary: '#2563eb',
+          colorSecondary: '#7c3aed',
+          colorBackground: '#f9fafb',
+          colorText: '#111827',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '8px',
+          borderStyle: 'solid',
+          borderWidth: '1px',
+          shadowStyle: 'light'
+        }
+      },
+      {
+        id: 'ocean',
+        name: '🌊 Ocean',
+        isDefault: true,
+        category: 'colorful',
+        createdAt: now,
+        style: {
+          colorPrimary: '#0ea5e9',
+          colorSecondary: '#06b6d4',
+          colorBackground: '#ffffff',
+          colorText: '#0f172a',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '16px',
+          borderStyle: 'solid',
+          borderWidth: '2px',
+          shadowStyle: 'medium'
+        }
+      },
+      {
+        id: 'sunset',
+        name: '🌅 Sunset',
+        isDefault: true,
+        category: 'colorful',
+        createdAt: now,
+        style: {
+          colorPrimary: '#f97316',
+          colorSecondary: '#ec4899',
+          colorBackground: '#ffffff',
+          colorText: '#1f2937',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '12px',
+          borderStyle: 'solid',
+          borderWidth: '2px',
+          shadowStyle: 'medium'
+        }
+      },
+      {
+        id: 'forest',
+        name: '🌲 Forest',
+        isDefault: true,
+        category: 'colorful',
+        createdAt: now,
+        style: {
+          colorPrimary: '#10b981',
+          colorSecondary: '#059669',
+          colorBackground: '#ffffff',
+          colorText: '#064e3b',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '8px',
+          borderStyle: 'solid',
+          borderWidth: '1px',
+          shadowStyle: 'light'
+        }
+      },
+      {
+        id: 'purple',
+        name: '💜 Purple Dream',
+        isDefault: true,
+        category: 'colorful',
+        createdAt: now,
+        style: {
+          colorPrimary: '#a855f7',
+          colorSecondary: '#ec4899',
+          colorBackground: '#faf5ff',
+          colorText: '#581c87',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '12px',
+          borderStyle: 'solid',
+          borderWidth: '1px',
+          shadowStyle: 'light'
+        }
+      },
+      {
+        id: 'minimal',
+        name: '⚫ Minimal',
+        isDefault: true,
+        category: 'minimal',
+        createdAt: now,
+        style: {
+          colorPrimary: '#18181b',
+          colorSecondary: '#71717a',
+          colorBackground: '#ffffff',
+          colorText: '#09090b',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '4px',
+          borderStyle: 'solid',
+          borderWidth: '1px',
+          shadowStyle: 'none'
+        }
+      },
+      {
+        id: 'midnight',
+        name: '🌃 Midnight',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#6366f1',
+          colorSecondary: '#8b5cf6',
+          colorBackground: '#0f172a',
+          colorText: '#e2e8f0',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '16px',
+          borderStyle: 'solid',
+          borderWidth: '2px',
+          shadowStyle: 'heavy'
+        }
+      },
+      {
+        id: 'cyberpunk',
+        name: '🎮 Cyberpunk',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#00ffff',
+          colorSecondary: '#ff00ff',
+          colorBackground: '#1a1a2e',
+          colorText: '#eee',
+          fontFamily: "'Roboto', sans-serif",
+          borderRadius: '0px',
+          borderStyle: 'solid',
+          borderWidth: '3px',
+          shadowStyle: 'heavy'
+        }
+      },
+      {
+        id: 'noir',
+        name: '🎬 Film Noir',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#52525b',
+          colorSecondary: '#71717a',
+          colorBackground: '#18181b',
+          colorText: '#d4d4d8',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '8px',
+          borderStyle: 'dashed',
+          borderWidth: '2px',
+          shadowStyle: 'medium'
+        }
+      },
+      {
+        id: 'neon',
+        name: '💡 Neon Night',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#22d3ee',
+          colorSecondary: '#a855f7',
+          colorBackground: '#0c0a09',
+          colorText: '#f5f5f4',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '12px',
+          borderStyle: 'solid',
+          borderWidth: '3px',
+          shadowStyle: 'heavy'
+        }
+      },
+      {
+        id: 'carbon',
+        name: '⚙️ Carbon',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#3b82f6',
+          colorSecondary: '#06b6d4',
+          colorBackground: '#262626',
+          colorText: '#e5e5e5',
+          fontFamily: "'Roboto', sans-serif",
+          borderRadius: '4px',
+          borderStyle: 'dotted',
+          borderWidth: '2px',
+          shadowStyle: 'light'
+        }
+      },
+      {
+        id: 'slate',
+        name: '🌑 Slate Dark',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#64748b',
+          colorSecondary: '#475569',
+          colorBackground: '#1e293b',
+          colorText: '#cbd5e1',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '8px',
+          borderStyle: 'dashed',
+          borderWidth: '1px',
+          shadowStyle: 'medium'
+        }
+      },
+      {
+        id: 'vampire',
+        name: '🧛 Vampire',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#dc2626',
+          colorSecondary: '#991b1b',
+          colorBackground: '#0a0a0a',
+          colorText: '#fecaca',
+          fontFamily: "'Montserrat', sans-serif",
+          borderRadius: '16px',
+          borderStyle: 'solid',
+          borderWidth: '4px',
+          shadowStyle: 'heavy'
+        }
+      },
+      {
+        id: 'flat-light',
+        name: '📄 Flat Light',
+        isDefault: true,
+        category: 'minimal',
+        createdAt: now,
+        style: {
+          colorPrimary: '#3b82f6',
+          colorSecondary: '#8b5cf6',
+          colorBackground: '#ffffff',
+          colorText: '#1f2937',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '0px',
+          borderStyle: 'none',
+          borderWidth: '0px',
+          shadowStyle: 'none'
+        }
+      },
+      {
+        id: 'flat-dark',
+        name: '📱 Flat Dark',
+        isDefault: true,
+        category: 'minimal',
+        createdAt: now,
+        style: {
+          colorPrimary: '#60a5fa',
+          colorSecondary: '#a78bfa',
+          colorBackground: '#1f2937',
+          colorText: '#f9fafb',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '0px',
+          borderStyle: 'none',
+          borderWidth: '0px',
+          shadowStyle: 'none'
+        }
+      },
+      {
+        id: 'pure-white',
+        name: '⬜ Pure White',
+        isDefault: true,
+        category: 'light',
+        createdAt: now,
+        style: {
+          colorPrimary: '#2563eb',
+          colorSecondary: '#7c3aed',
+          colorBackground: '#ffffff',
+          colorText: '#111827',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '8px',
+          borderStyle: 'none',
+          borderWidth: '0px',
+          shadowStyle: 'none'
+        }
+      },
+      {
+        id: 'pure-black',
+        name: '⬛ Pure Black',
+        isDefault: true,
+        category: 'dark',
+        createdAt: now,
+        style: {
+          colorPrimary: '#3b82f6',
+          colorSecondary: '#8b5cf6',
+          colorBackground: '#000000',
+          colorText: '#ffffff',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '8px',
+          borderStyle: 'none',
+          borderWidth: '0px',
+          shadowStyle: 'none'
+        }
+      },
+      {
+        id: 'smooth-ocean',
+        name: '🌊 Smooth Ocean',
+        isDefault: true,
+        category: 'light',
+        createdAt: now,
+        style: {
+          colorPrimary: '#06b6d4',
+          colorSecondary: '#0ea5e9',
+          colorBackground: '#ecfeff',
+          colorText: '#0c4a6e',
+          fontFamily: 'Inter, sans-serif',
+          borderRadius: '12px',
+          borderStyle: 'none',
+          borderWidth: '0px',
+          shadowStyle: 'none'
+        }
+      },
+      {
+        id: 'zen',
+        name: '🧘 Zen',
+        isDefault: true,
+        category: 'light',
+        createdAt: now,
+        style: {
+          colorPrimary: '#10b981',
+          colorSecondary: '#059669',
+          colorBackground: '#f0fdf4',
+          colorText: '#064e3b',
+          fontFamily: 'system-ui, sans-serif',
+          borderRadius: '16px',
+          borderStyle: 'none',
+          borderWidth: '0px',
+          shadowStyle: 'none'
+        }
+      }
+    ];
+  }
+
+  /**
+   * Récupérer tous les presets (par défaut + personnalisés)
+   */
+  async getPresets(): Promise<StylePreset[]> {
+    try {
+      const content = await readFile(this.presetsFile, 'utf-8');
+      const data: PresetsData = JSON.parse(content);
+      return data.presets || [];
+    } catch (error) {
+      console.error('Erreur lors de la lecture des presets:', error);
+      return this.getDefaultPresets();
+    }
+  }
+
+  /**
+   * Récupérer un preset par son ID
+   */
+  async getPreset(id: string): Promise<StylePreset | null> {
+    const presets = await this.getPresets();
+    return presets.find(p => p.id === id) || null;
+  }
+
+  /**
+   * Créer un nouveau preset personnalisé
+   */
+  async createPreset(name: string, style: TabStyle): Promise<StylePreset> {
+    const presets = await this.getPresets();
+
+    const preset: StylePreset = {
+      id: uuidv4(),
+      name,
+      style,
+      isDefault: false,
+      createdAt: new Date().toISOString()
+    };
+
+    presets.push(preset);
+
+    await writeFile(this.presetsFile, JSON.stringify({ presets }, null, 2));
+    console.log(`✅ Preset personnalisé créé: ${name}`);
+
+    return preset;
+  }
+
+  /**
+   * Supprimer un preset personnalisé
+   */
+  async deletePreset(id: string): Promise<void> {
+    const presets = await this.getPresets();
+
+    // Ne pas permettre de supprimer les presets par défaut
+    const preset = presets.find(p => p.id === id);
+    if (!preset) {
+      throw new Error(`Preset ${id} introuvable`);
+    }
+
+    if (preset.isDefault) {
+      throw new Error('Impossible de supprimer un preset par défaut');
+    }
+
+    const filtered = presets.filter(p => p.id !== id);
+    await writeFile(this.presetsFile, JSON.stringify({ presets: filtered }, null, 2));
+
+    console.log(`✅ Preset supprimé: ${id}`);
+  }
+}
+
+// Export singleton
+export const presetManager = new PresetManager();

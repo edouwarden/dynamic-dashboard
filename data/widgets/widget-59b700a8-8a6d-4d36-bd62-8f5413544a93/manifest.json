@@ -1,0 +1,247 @@
+{
+  "widget": {
+    "id": "widget-59b700a8-8a6d-4d36-bd62-8f5413544a93",
+    "name": "Price Chart",
+    "emoji": "📈",
+    "description": "TradingView-style price chart for crypto and market symbols, configured per tab.",
+    "version": "1.0.0",
+    "createdAt": "2026-02-17T18:59:11.381Z",
+    "updatedAt": "2026-03-14T22:00:55.266Z",
+    "dbPermissions": [],
+    "configSchema": {
+      "ticker": {
+        "type": "string",
+        "label": "Ticker / Asset",
+        "default": "BTC",
+        "description": "Symbole à afficher (ex: BTC, ETH, AAPL, EURUSD). Peut être lié à une variable d'onglet via $var:asset."
+      },
+      "interval": {
+        "type": "select",
+        "label": "Intervalle de temps",
+        "options": [
+          "1",
+          "5",
+          "15",
+          "30",
+          "60",
+          "240",
+          "D",
+          "W",
+          "M"
+        ],
+        "default": "D",
+        "description": "Unité de temps des bougies (1=1min, 60=1h, D=jour, W=semaine, M=mois)"
+      },
+      "chartStyle": {
+        "type": "select",
+        "label": "Style du graphique",
+        "options": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "8",
+          "9"
+        ],
+        "default": "1",
+        "description": "0=Barres, 1=Bougies, 2=Bougies creuses, 3=Ligne, 4=Zone, 8=Heiken Ashi, 9=Points"
+      },
+      "timezone": {
+        "type": "select",
+        "label": "Fuseau horaire",
+        "options": [
+          "Etc/UTC",
+          "Europe/Paris",
+          "Europe/London",
+          "America/New_York",
+          "America/Chicago",
+          "America/Los_Angeles",
+          "Asia/Tokyo",
+          "Asia/Shanghai",
+          "Asia/Dubai",
+          "Australia/Sydney"
+        ],
+        "default": "Etc/UTC",
+        "description": "Fuseau horaire pour l'affichage des horaires"
+      },
+      "locale": {
+        "type": "select",
+        "label": "Langue",
+        "options": [
+          "fr",
+          "en",
+          "de",
+          "es",
+          "it",
+          "pt",
+          "zh",
+          "ja",
+          "ar",
+          "ru"
+        ],
+        "default": "fr",
+        "description": "Langue de l'interface TradingView"
+      },
+      "hideToolbar": {
+        "type": "boolean",
+        "label": "Masquer la barre d'outils",
+        "default": false,
+        "description": "Cache la barre d'outils supérieure (intervalle, indicateurs...)"
+      },
+      "hideSideToolbar": {
+        "type": "boolean",
+        "label": "Masquer le menu dessins",
+        "default": false,
+        "description": "Cache la barre latérale de dessins (lignes de tendance, formes, annotations...)"
+      },
+      "hideLegend": {
+        "type": "boolean",
+        "label": "Masquer la légende",
+        "default": false,
+        "description": "Cache les informations OHLC et le nom de l'instrument"
+      },
+      "hideVolume": {
+        "type": "boolean",
+        "label": "Masquer le volume",
+        "default": false,
+        "description": "Cache les barres de volume en bas du graphique"
+      },
+      "showDateRanges": {
+        "type": "boolean",
+        "label": "Afficher les plages de dates",
+        "default": true,
+        "description": "Affiche les boutons de sélection rapide (1J, 1S, 1M...)"
+      },
+      "allowSymbolChange": {
+        "type": "boolean",
+        "label": "Permettre le changement de symbole",
+        "default": false,
+        "description": "Autorise l'utilisateur à changer le symbole directement dans le widget"
+      },
+      "showCalendar": {
+        "type": "boolean",
+        "label": "Afficher le calendrier économique",
+        "default": false,
+        "description": "Superpose les événements économiques sur le graphique"
+      },
+      "scalePosition": {
+        "type": "select",
+        "label": "Position de l'échelle des prix",
+        "options": [
+          "right",
+          "left",
+          "no"
+        ],
+        "default": "right",
+        "description": "Côté d'affichage de l'échelle verticale des prix"
+      },
+      "scaleMode": {
+        "type": "select",
+        "label": "Mode de l'échelle",
+        "options": [
+          "Normal",
+          "Logarithmic",
+          "Percentage",
+          "IndexedTo100"
+        ],
+        "default": "Normal",
+        "description": "Normal, Logarithmique, Pourcentage ou Indexé à 100"
+      },
+      "chartTitle": {
+        "type": "string",
+        "label": "Titre du graphique",
+        "default": "",
+        "description": "Titre ou description personnalisé affiché au-dessus du graphique (laisser vide pour masquer)"
+      },
+      "chartTooltip": {
+        "type": "string",
+        "label": "Info-bulle (hover)",
+        "default": "",
+        "description": "Texte affiché au survol d'une icône ℹ à côté du titre (optionnel)"
+      },
+      "candleUpColor": {
+        "type": "string",
+        "label": "🟢 Body UP (hex)",
+        "default": "#089981",
+        "description": "Couleur du corps des bougies haussières (ex: #089981)"
+      },
+      "candleDownColor": {
+        "type": "string",
+        "label": "🔴 Body DOWN (hex)",
+        "default": "#f23645",
+        "description": "Couleur du corps des bougies baissières (ex: #f23645)"
+      },
+      "candleBorderUpColor": {
+        "type": "string",
+        "label": "🟢 Border UP (hex)",
+        "default": "#089981",
+        "description": "Couleur de la bordure des bougies haussières"
+      },
+      "candleBorderDownColor": {
+        "type": "string",
+        "label": "🔴 Border DOWN (hex)",
+        "default": "#f23645",
+        "description": "Couleur de la bordure des bougies baissières"
+      },
+      "candleWickUpColor": {
+        "type": "string",
+        "label": "🟢 Wick UP (hex)",
+        "default": "#089981",
+        "description": "Couleur des mèches des bougies haussières"
+      },
+      "candleWickDownColor": {
+        "type": "string",
+        "label": "🔴 Wick DOWN (hex)",
+        "default": "#f23645",
+        "description": "Couleur des mèches des bougies baissières"
+      },
+      "backgroundMode": {
+        "type": "select",
+        "label": "Fond du graphique",
+        "options": [
+          "flat",
+          "gradient"
+        ],
+        "default": "flat",
+        "description": "flat=couleur unie, gradient=dégradé personnalisé"
+      },
+      "backgroundColor": {
+        "type": "string",
+        "label": "Couleur de fond (hex)",
+        "default": "",
+        "description": "Ex: #ffffff ou #1a1a1a (optionnel, auto sinon)"
+      },
+      "gradientColorStart": {
+        "type": "string",
+        "label": "Couleur gradient début (hex)",
+        "default": "#ffffff",
+        "description": "Couleur de début du dégradé si mode=gradient"
+      },
+      "gradientColorEnd": {
+        "type": "string",
+        "label": "Couleur gradient fin (hex)",
+        "default": "#f0f0f0",
+        "description": "Couleur de fin du dégradé si mode=gradient"
+      },
+      "defaultIndicators": {
+        "type": "string",
+        "label": "Indicateurs par défaut",
+        "default": "",
+        "description": "Indicateurs à charger (ex: SMA,EMA,RSI,MACD,BBANDS). Laisser vide pour aucun."
+      },
+      "defaultIndicatorsOpen": {
+        "type": "boolean",
+        "label": "Ouvrir les indicateurs par défaut",
+        "default": false,
+        "description": "Si activé, le panneau des indicateurs s'ouvre automatiquement au chargement"
+      }
+    },
+    "defaultSize": {
+      "cols": 6,
+      "rows": 4
+    },
+    "category": "trading"
+  },
+  "version": 7
+}

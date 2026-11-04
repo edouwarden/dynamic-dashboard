@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-budget-planner",
+    "name": "Budget Planner",
+    "emoji": "💳",
+    "description": "Monthly spending by category with budget progress, remaining cash and overspend flags.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "updatedAt": "2026-11-03T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "budget_categories",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 10,
+      "rows": 14
+    },
+    "category": "finance",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

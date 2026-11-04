@@ -1,0 +1,14 @@
+# Cloudflare Pages configuration for the static demo.
+#
+# In the Pages dashboard use:
+#   Root directory:    repository root
+#   Build command:     node demo-static/build.mjs
+#   Output directory:  demo-static/public
+#
+# Or deploy the generated folder directly:
+#   node demo-static/build.mjs
+#   npx wrangler pages deploy demo-static/public
+
+name = "dashboard-static-demo"
+pages_build_output_dir = "demo-static/public"
+compatibility_date = "2026-01-01"

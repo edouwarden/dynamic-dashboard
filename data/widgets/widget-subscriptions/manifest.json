@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-subscriptions",
+    "name": "Subscriptions",
+    "emoji": "🔁",
+    "description": "Recurring payments with next charge dates and a normalized monthly total.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "updatedAt": "2026-11-03T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "subscriptions",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 14,
+      "rows": 5
+    },
+    "category": "finance",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

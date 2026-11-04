@@ -1,0 +1,53 @@
+{
+  "widget": {
+    "id": "widget-1422e28c-14ed-4e29-bf00-6bb2593b7ea4",
+    "name": "Market Hours",
+    "emoji": "⏱️",
+    "description": "Opening and closing countdowns for major exchanges in your timezone.",
+    "version": "1.0.0",
+    "createdAt": "2026-03-12T22:12:14.862Z",
+    "updatedAt": "2026-03-14T21:58:56.022Z",
+    "dbPermissions": [],
+    "configSchema": {
+      "userTimezone": {
+        "type": "select",
+        "label": "Fuseau horaire personnel",
+        "description": "Votre fuseau horaire pour afficher les décalages horaires",
+        "options": [
+          "America/New_York",
+          "America/Chicago",
+          "America/Denver",
+          "America/Los_Angeles",
+          "America/Toronto",
+          "Europe/London",
+          "Europe/Paris",
+          "Europe/Berlin",
+          "Europe/Moscow",
+          "Asia/Dubai",
+          "Asia/Kolkata",
+          "Asia/Bangkok",
+          "Asia/Shanghai",
+          "Asia/Hong_Kong",
+          "Asia/Tokyo",
+          "Asia/Singapore",
+          "Australia/Sydney",
+          "Australia/Melbourne",
+          "Pacific/Auckland"
+        ],
+        "default": "Europe/Paris"
+      },
+      "autoRefresh": {
+        "type": "boolean",
+        "label": "Actualisation automatique",
+        "description": "Mettre à jour l'affichage chaque seconde",
+        "default": true
+      }
+    },
+    "defaultSize": {
+      "cols": 3,
+      "rows": 2
+    },
+    "category": "trading"
+  },
+  "version": 3
+}

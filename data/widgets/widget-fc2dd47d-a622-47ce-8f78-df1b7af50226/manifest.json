@@ -1,0 +1,19 @@
+{
+  "widget": {
+    "id": "widget-fc2dd47d-a622-47ce-8f78-df1b7af50226",
+    "name": "World Heatmap",
+    "emoji": "🗺️",
+    "description": "World map heatmap of country-level market performance.",
+    "version": "1.0.0",
+    "createdAt": "2026-03-12T22:27:50.416Z",
+    "updatedAt": "2026-03-14T21:58:53.592Z",
+    "dbPermissions": [],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 6,
+      "rows": 6
+    },
+    "category": "trading"
+  },
+  "version": 2
+}

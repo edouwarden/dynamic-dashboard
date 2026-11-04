@@ -1,0 +1,21 @@
+{
+  "widget": {
+    "id": "widget-ai-assistant",
+    "name": "AI Assistant",
+    "emoji": "🤖",
+    "description": "Chat panel with a deterministic mock SSE assistant for the public demo.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-02T00:00:00.000Z",
+    "updatedAt": "2026-11-02T00:00:00.000Z",
+    "dbPermissions": [],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 14,
+      "rows": 10
+    },
+    "category": "tools",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

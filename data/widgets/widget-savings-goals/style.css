@@ -1,0 +1,35 @@
+:root {
+  --bg: var(--color-bg, #0b1120);
+  --text: var(--color-text, #e5e7eb);
+  --muted: #94a3b8;
+  --line: rgba(148, 163, 184, 0.16);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body {
+  background: radial-gradient(240px 150px at 100% 0%, rgba(251, 191, 36, 0.1), transparent 65%), var(--bg);
+  color: var(--text);
+  font-family: var(--font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+}
+.goals { height: 100%; display: flex; flex-direction: column; padding: 11px 12px 9px; }
+.head { display: flex; align-items: center; justify-content: space-between; }
+.title { display: flex; align-items: center; gap: 7px; }
+.icon {
+  display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px;
+  background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.26); font-size: 11px;
+}
+h1 { margin: 0; font-size: 12px; font-weight: 600; }
+.total { font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.list { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; align-content: center; overflow: hidden; }
+.goal { padding: 2px; min-width: 0; }
+.top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.emoji { font-size: 11px; width: 15px; text-align: center; }
+.name { flex: 1; font-size: 10px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pct { font-size: 9px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar { height: 5px; border-radius: 999px; background: rgba(148, 163, 184, 0.14); overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: inherit; transition: width .5s ease; }
+.amount { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.amount b { color: var(--text); font-weight: 600; }
+.empty { display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 11px; }

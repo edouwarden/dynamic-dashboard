@@ -1,0 +1,44 @@
+{
+  "widget": {
+    "id": "widget-0ed92de3-1b6d-4b6d-980a-5d0cfc689e69",
+    "name": "Flashcards",
+    "emoji": "🃏",
+    "description": "Spaced-repetition review built on the shared flashcards tables.",
+    "version": "1.0.0",
+    "createdAt": "2026-03-19T21:25:04.288Z",
+    "updatedAt": "2026-03-19T21:53:41.164Z",
+    "dbPermissions": [
+      {
+        "table": "flashcards",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "flashcard_reviews",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      },
+      {
+        "table": "learner_profile",
+        "actions": [
+          "select",
+          "insert",
+          "update",
+          "delete"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "autoApproveCreateTable": true,
+    "category": "school"
+  },
+  "version": 10
+}

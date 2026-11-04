@@ -1,0 +1,37 @@
+{
+  "name": "local-first-dashboard",
+  "version": "1.0.0",
+  "description": "A local-first builder for custom dashboards and small tools.",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "bun": ">=1.2.0"
+  },
+  "scripts": {
+    "dev": "bun run --watch index.ts",
+    "start": "bun run index.ts",
+    "seed": "bun run scripts/seed.ts",
+    "typecheck": "tsc --noEmit",
+    "check": "bun run typecheck && git diff --check",
+    "bump": "bun run scripts/bump-version.ts",
+    "generate-emojis": "bun run scripts/generate-emojis.ts",
+    "generate-icons": "bun run scripts/generate-icons.ts",
+    "demo:data": "bun demo-static/tools/generate-data.mjs",
+    "demo:build": "bun demo-static/build.mjs",
+    "demo:dev": "bun demo-static/tools/serve.mjs"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/uuid": "^11.0.0",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "emoji-datasource-google": "^16.0.0",
+    "hono": "^4.11.1",
+    "node-pty": "^1.1.0",
+    "uuid": "^13.0.0"
+  }
+}

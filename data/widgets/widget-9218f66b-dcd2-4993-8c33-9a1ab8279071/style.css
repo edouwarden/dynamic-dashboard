@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  padding: 12px;
+  font-family: var(--font-family, sans-serif);
+  color: var(--color-text, #1f2937);
+  background: var(--color-bg, #ffffff);
+  box-sizing: border-box;
+}
+
+#widget-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#widget-root h2 {
+  margin: 0 0 12px 0;
+  color: var(--color-primary, #3b82f6);
+  font-size: 1.25rem;
+}
+
+.todo-input-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+#todo-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: var(--border-width, 1px) var(--border-style, solid) var(--color-secondary, #e5e7eb);
+  border-radius: var(--border-radius, 6px);
+  font-family: inherit;
+  font-size: 0.875rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+#todo-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #3b82f6);
+}
+
+#add-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: var(--border-radius, 6px);
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+#add-btn:hover {
+  opacity: 0.85;
+}
+
+#todo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid var(--color-secondary, #e5e7eb);
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-item.completed span {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.todo-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.todo-item span {
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.todo-item button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.todo-item button:hover {
+  opacity: 1;
+}
+
+.todo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-secondary, #e5e7eb);
+  font-size: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+#clear-completed {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+#clear-completed:hover {
+  opacity: 1;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.5;
+  font-size: 0.875rem;
+}

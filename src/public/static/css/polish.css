@@ -1,0 +1,474 @@
+/* ================================================================
+   POLISH & MICRO-INTERACTIONS
+   ================================================================ */
+
+/* Logo pulse subtil au hover */
+.logo:hover .logo-icon {
+  animation: logoPulse 0.6s ease;
+}
+
+@keyframes logoPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15) rotate(5deg); }
+  100% { transform: scale(1); }
+}
+
+/* Header titre — transition douce au changement */
+.tab-title h1 {
+  transition: opacity 0.2s ease;
+}
+
+/* Sidebar border glow subtil */
+.sidebar {
+  box-shadow: 1px 0 0 0 var(--sidebar-accent-shadow);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Améliorer la transition active du tab dans sidebar */
+.tab-item.active:hover {
+  transform: none;
+}
+
+/* Status dot pulse quand connecté */
+.status-dot.connected {
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { box-shadow: 0 0 6px var(--success); }
+  50% { box-shadow: 0 0 12px var(--success), 0 0 20px rgba(0, 200, 83, 0.2); }
+}
+
+/* Skeleton loader pour widgets en chargement */
+.widget-skeleton {
+  background: var(--bg-tertiary);
+  border-radius: inherit;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.widget-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 60%,
+    transparent 100%
+  );
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Transition fluide sur le content-area */
+.content-area {
+  transition: opacity 0.2s ease;
+}
+
+/* Welcome screen — animation d'entrée */
+.welcome-content {
+  animation: welcomeFadeUp 0.5s ease-out;
+}
+
+@keyframes welcomeFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover lift subtil sur les cards */
+.table-item:hover, .permission-item:hover {
+  transform: translateY(-1px);
+}
+
+.backup-item:hover {
+  transform: translateY(-1px);
+}
+
+/* Notification toast — améliorer l'entrée */
+.notification-toast {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Selection style */
+::selection {
+  background: rgba(0, 212, 255, 0.25);
+  color: var(--text-primary);
+}
+
+/* Focus visible pour accessibilité */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Transitions sur les border-color de .tab-btn (navigation onglets modaux) */
+.tab-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn.active {
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Tooltip styling global (si title attribut utilisé) */
+[title] {
+  cursor: help;
+}
+
+/* Privacy toggle smooth */
+.privacy-mode .widget-iframe {
+  transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.privacy-mode .widget-wrapper.privacy-revealed .widget-iframe {
+  transition: filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.privacy-mode .tab-name,
+.privacy-mode #currentTabName {
+  transition: filter 0.3s ease;
+}
+
+/* Sidebar scripts btn — glow au hover */
+.sidebar-scripts-btn:hover {
+  box-shadow: 0 0 16px rgba(0, 212, 255, 0.2);
+}
+
+/* Edit toolbar entrée plus fluide */
+@keyframes toolbarSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  50% {
+    transform: translateY(2px) scale(1.01);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Chat bubble animation d'apparition */
+.chat-message {
+  animation: chatMessageIn 0.25s ease-out;
+}
+
+@keyframes chatMessageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Chat input focus glow */
+.chat-input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.12), 0 0 20px rgba(0, 212, 255, 0.06);
+}
+
+/* Smooth color transitions for preset cards */
+.preset-carousel .preset-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Emoji grid items — staggered feel */
+.emoji-grid-item {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduce motion pour utilisateurs qui le demandent */
+/* ============================================================
+   Widget Fullscreen
+   ============================================================ */
+
+
+/* Mode fullscreen : bouton actif dans le header */
+#fullscreenModeBtn.active {
+  background: var(--accent-primary, #3b82f6);
+  color: #fff;
+}
+
+/* Mode fullscreen : overlay cliquable sur chaque widget */
+.widget-fs-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  cursor: pointer;
+  background: rgba(59, 130, 246, 0.08);
+  border: 2px solid transparent;
+  border-radius: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.widget-fs-overlay:hover {
+  background: rgba(59, 130, 246, 0.18);
+  border-color: var(--accent-primary, #3b82f6);
+}
+
+/* Overlay fullscreen (la modal) */
+.widget-fullscreen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.widget-fullscreen-overlay.visible {
+  opacity: 1;
+}
+
+.widget-fullscreen-modal {
+  position: relative;
+  width: 90vw;
+  height: 88vh;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-secondary, #1a1a2e);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+}
+
+.widget-fullscreen-overlay.visible .widget-fullscreen-modal {
+  transform: scale(1) translateY(0);
+}
+
+.widget-fullscreen-modal iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.widget-fullscreen-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.widget-fullscreen-close:hover {
+  background: rgba(0, 0, 0, 0.75);
+  transform: scale(1.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ================================================================
+   DASHBOARD OPENCODE PANEL (slide-in overlay)
+   ================================================================ */
+
+.dashboard-opencode-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1100;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  animation: dashboardClaudeFadeIn 0.18s ease;
+}
+
+@keyframes dashboardOpenCodeFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.dashboard-opencode-panel {
+  width: min(520px, 95vw);
+  background: var(--bg-secondary, #1a1d27);
+  border-left: 1px solid var(--border-color, #2d3146);
+  display: flex;
+  flex-direction: column;
+  animation: dashboardClaudeSlideIn 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes dashboardOpenCodeSlideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.dashboard-opencode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color, #2d3146);
+  flex-shrink: 0;
+}
+
+.dashboard-opencode-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #e2e8f0);
+}
+
+#dashboardOpenCodePanelMount {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Scoper les styles OpenCodePanel pour le contexte dashboard (mirror .editor-opencode-panel) */
+#dashboardOpenCodePanelMount .chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+}
+
+#dashboardOpenCodePanelMount .opencode-input-area {
+  flex-shrink: 0;
+}
+
+#dashboardOpenCodePanelMount .prompt-queue-container {
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* Messages — même style que .editor-opencode-panel */
+#dashboardOpenCodePanelMount .message-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 0 2px;
+  margin-bottom: 2px;
+}
+
+#dashboardOpenCodePanelMount .message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+#dashboardOpenCodePanelMount .message-avatar.user {
+  background: linear-gradient(135deg, var(--accent-primary), #0099cc);
+}
+
+#dashboardOpenCodePanelMount .message-avatar.assistant {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+#dashboardOpenCodePanelMount .message-bubble {
+  max-width: 94%;
+  width: fit-content;
+  padding: 10px 14px;
+  border-radius: 16px;
+  line-height: 1.5;
+  font-size: 13.5px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+#dashboardOpenCodePanelMount .chat-message.user .message-bubble {
+  background: linear-gradient(135deg, var(--accent-primary), #0099cc);
+  color: white;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 212, 255, 0.15);
+}
+
+#dashboardOpenCodePanelMount .chat-message.assistant .message-bubble {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-bottom-left-radius: 6px;
+}
+
+/* Loading */
+#dashboardOpenCodePanelMount .message-bubble-loading {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 4px 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#dashboardOpenCodePanelMount .message-bubble-loading .loading-dots {
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* Bannière reload */
+.dashboard-reload-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-secondary, #1a1d27);
+  border: 1px solid var(--accent-color, #6366f1);
+  border-radius: 10px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  z-index: 2000;
+  font-size: 13px;
+  color: var(--text-primary, #e2e8f0);
+  white-space: nowrap;
+}
+
+.dashboard-reload-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}

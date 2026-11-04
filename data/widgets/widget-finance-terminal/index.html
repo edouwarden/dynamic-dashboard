@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Terminal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="terminal">
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark">◈</span>
+        <div>
+          <h1>Finance Terminal</h1>
+          <p>Paper portfolio · seeded demo data</p>
+        </div>
+      </div>
+      <div class="status">
+        <span class="live-dot"></span>
+        <span id="marketLabel">Market open</span>
+        <span class="clock" id="clock">--:--</span>
+      </div>
+    </header>
+
+    <section class="kpis" id="kpis">
+      <div class="kpi"><span>Net worth</span><strong>—</strong><em>positions + cash</em></div>
+      <div class="kpi"><span>Day P/L</span><strong>—</strong><em>unrealised today</em></div>
+      <div class="kpi"><span>Total P/L</span><strong>—</strong><em>since entry</em></div>
+      <div class="kpi"><span>Cash</span><strong>—</strong><em>dry powder</em></div>
+    </section>
+
+    <main class="grid">
+      <section class="panel watch">
+        <div class="panel-head">
+          <div class="segmented" id="viewTabs">
+            <button class="active" data-view="watchlist">Watchlist</button>
+            <button data-view="positions">Positions</button>
+          </div>
+          <span class="meta" id="rowMeta">—</span>
+        </div>
+        <div class="table" id="table"></div>
+      </section>
+
+      <aside class="side">
+        <section class="panel news">
+          <div class="panel-head"><h2>News flow</h2><span class="meta">local feed</span></div>
+          <div class="news-list" id="news"></div>
+        </section>
+        <section class="panel alerts">
+          <div class="panel-head"><h2>Alerts</h2><span class="meta" id="alertCount">—</span></div>
+          <div class="alert-list" id="alerts"></div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="foot">
+      <span>SQLite · <span id="updated">—</span></span>
+      <span class="foot-note">No live market API. Values are fictional.</span>
+    </footer>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const instanceId = params.get('instanceId');
+    const tabId = params.get('tabId');
+    const config = JSON.parse(params.get('config') || '{}');
+
+    async function queryDB(query) {
+      const res = await fetch(`/api/tabs/${tabId}/widgets/${instanceId}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(query)
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error);
+      return result.data;
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

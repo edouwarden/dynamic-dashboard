@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-net-worth",
+    "name": "Net Worth",
+    "emoji": "🏦",
+    "description": "Net worth snapshot with assets, liabilities, equity share and an account breakdown.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "updatedAt": "2026-11-03T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "net_worth_items",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 14,
+      "rows": 5
+    },
+    "category": "finance",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

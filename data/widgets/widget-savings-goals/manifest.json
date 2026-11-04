@@ -1,0 +1,28 @@
+{
+  "widget": {
+    "id": "widget-savings-goals",
+    "name": "Savings Goals",
+    "emoji": "🎯",
+    "description": "Named savings targets with progress bars, saved amount and total progress.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "updatedAt": "2026-11-03T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "savings_goals",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 7,
+      "rows": 4
+    },
+    "category": "finance",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

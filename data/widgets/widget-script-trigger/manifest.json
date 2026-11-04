@@ -1,0 +1,31 @@
+{
+  "widget": {
+    "id": "widget-script-trigger",
+    "name": "Script Trigger",
+    "emoji": "▶️",
+    "description": "Button that runs a global script and streams its output.",
+    "version": "1.0.0",
+    "category": "tools",
+    "createdAt": "2026-02-18T00:00:00.000Z",
+    "updatedAt": "2026-02-27T12:41:32.578Z",
+    "dbPermissions": [],
+    "configSchema": {
+      "scriptId": {
+        "type": "string",
+        "label": "ID du script",
+        "description": "L'identifiant du script à déclencher (visible dans le menu Scripts)"
+      },
+      "label": {
+        "type": "string",
+        "label": "Étiquette du bouton",
+        "default": "Exécuter",
+        "description": "Texte affiché sur le bouton de déclenchement"
+      }
+    },
+    "defaultSize": {
+      "cols": 4,
+      "rows": 3
+    }
+  },
+  "version": 3
+}

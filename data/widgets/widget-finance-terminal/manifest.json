@@ -1,0 +1,46 @@
+{
+  "widget": {
+    "id": "widget-finance-terminal",
+    "name": "Finance Terminal",
+    "emoji": "📈",
+    "description": "Compact market terminal: watchlist, positions, news and alerts backed by SQLite.",
+    "version": "1.0.0",
+    "createdAt": "2026-11-02T00:00:00.000Z",
+    "updatedAt": "2026-11-02T00:00:00.000Z",
+    "dbPermissions": [
+      {
+        "table": "finance_watchlist",
+        "actions": [
+          "select"
+        ]
+      },
+      {
+        "table": "finance_positions",
+        "actions": [
+          "select"
+        ]
+      },
+      {
+        "table": "finance_news",
+        "actions": [
+          "select"
+        ]
+      },
+      {
+        "table": "finance_alerts",
+        "actions": [
+          "select"
+        ]
+      }
+    ],
+    "configSchema": {},
+    "defaultSize": {
+      "cols": 16,
+      "rows": 10
+    },
+    "category": "trading",
+    "canSendGlobalNotifications": false,
+    "canSendTabNotifications": false
+  },
+  "version": 1
+}

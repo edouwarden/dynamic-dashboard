@@ -2,7 +2,7 @@
   <img src="docs/trailer.webp" alt="Dashboard trailer: six example tabs, editing a widget with OpenCode in place, an empty tab filled with existing widgets in a timelapse, and nine tab themes" width="880">
 </p>
 
-<p align="center"><a href="https://dynamic-dashboard-edouwarden.vercel.app/"><strong>▶&nbsp;&nbsp;Open the live demo</strong></a></p>
+<p align="center"><a href="https://dynamic-dashboard.ednormand.fr/"><strong>▶&nbsp;&nbsp;Open the live demo</strong></a></p>
 
 # Dashboard
 
@@ -157,7 +157,7 @@ In the static build:
 - widget authoring, script execution and backups are disabled with an explicit 403 message (the build is a showcase, not an editor);
 - the agent is a scripted mock: three selectable prompts, canned replies streamed locally, labelled **Scripted demo agent — no model runs**.
 
-**Live demo:** <https://dynamic-dashboard-edouwarden.vercel.app/> — the static build, with fictional data stored in the browser.
+**Live demo:** <https://dynamic-dashboard.ednormand.fr/> — the static build, with fictional data stored in the browser.
 
 **Deploy:** the demo is a static site with no server runtime, served by Cloudflare Workers Static Assets (`wrangler.jsonc`). Connect `edouwarden/dynamic-dashboard` to a Worker named `dashboard-static-demo` in Workers Builds with:
 

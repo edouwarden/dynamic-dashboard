@@ -21,12 +21,14 @@
     "generate-icons": "bun run scripts/generate-icons.ts",
     "demo:data": "bun demo-static/tools/generate-data.mjs",
     "demo:build": "bun demo-static/build.mjs",
-    "demo:dev": "bun demo-static/tools/serve.mjs"
+    "demo:dev": "bun demo-static/tools/serve.mjs",
+    "demo:deploy": "wrangler deploy"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/uuid": "^11.0.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.157.0"
   },
   "dependencies": {
     "emoji-datasource-google": "^16.0.0",

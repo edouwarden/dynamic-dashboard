@@ -141,12 +141,13 @@ The demo can be reset at any time with `POST /api/demo/reset`. Nothing from the 
 
 ## Static demo (no server)
 
-`demo-static/` builds a completely static copy of the demo that can be hosted on Vercel, Cloudflare Pages or any file server. It ships the same shell and the same 28 widgets, but every `/api/*` call is answered in the browser by an IndexedDB engine. No database, Bun process or model is required.
+`demo-static/` builds a completely static copy of the demo that can be hosted on Cloudflare Workers, Vercel or any file server. It ships the same shell and the same 28 widgets, but every `/api/*` call is answered in the browser by an IndexedDB engine. No database, Bun process or model is required.
 
 ```bash
 bun run demo:data    # regenerate demo-static/data/seed.json from data/demo.db
 bun run demo:build   # write the static site to demo-static/public
 bun run demo:dev     # preview it at http://localhost:4173/
+bun run demo:deploy  # deploy demo-static/public to Cloudflare Workers
 ```
 
 In the static build:
@@ -158,7 +159,13 @@ In the static build:
 
 **Live demo:** <https://dynamic-dashboard-edouwarden.vercel.app/> — the static build, with fictional data stored in the browser.
 
-**Deploy:** on Vercel, import the repository as-is — `vercel.json` sets `sh demo-static/build.sh` and `demo-static/public`. The deploy builds with a POSIX shell only, so no runtime or dependency install is required. On Cloudflare Pages, use the same build command and output directory (also configured in `wrangler.toml`), or run `sh demo-static/build.sh && npx wrangler pages deploy demo-static/public`.
+**Deploy:** the demo is a static site with no server runtime, served by Cloudflare Workers Static Assets (`wrangler.jsonc`). Connect `edouwarden/dynamic-dashboard` to a Worker named `dashboard-static-demo` in Workers Builds with:
+
+- build command `sh demo-static/build.sh`
+- deploy command `npx wrangler deploy`
+- build variable `SKIP_DEPENDENCY_INSTALL=1` (the demo build needs no dependencies)
+
+Then attach a custom domain under **Settings → Domains & Routes**. Locally, `sh demo-static/build.sh && bun run demo:deploy` does the same. The same build output also runs on Vercel or Cloudflare Pages with `sh demo-static/build.sh` and `demo-static/public`.
 
 ## How it works
 

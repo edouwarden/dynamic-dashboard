@@ -3,7 +3,7 @@
 #
 # Usage: sh demo-static/build.sh
 #
-# Same output as build.mjs. Used by Vercel/Cloudflare Pages so the deploy
+# Same output as build.mjs. Used by Cloudflare Workers/Vercel so the deploy
 # needs no runtime beyond a POSIX shell.
 
 set -eu

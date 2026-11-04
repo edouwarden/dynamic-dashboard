@@ -1,0 +1,17 @@
+// Cloudflare Workers configuration — static demo only.
+//
+// The build output is plain HTML, CSS and JavaScript, so there is no Worker
+// script: wrangler uploads demo-static/public as static assets.
+//
+// Local:    sh demo-static/build.sh && bun run demo:deploy
+// Builds:   build command `sh demo-static/build.sh`
+//           deploy command `npx wrangler deploy`
+//           build variable `SKIP_DEPENDENCY_INSTALL=1`
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "dashboard-static-demo",
+  "compatibility_date": "2026-11-04",
+  "assets": {
+    "directory": "./demo-static/public"
+  }
+}

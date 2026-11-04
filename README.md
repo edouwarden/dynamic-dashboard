@@ -2,7 +2,7 @@
   <img src="docs/trailer.webp" alt="Dashboard trailer: six example tabs, editing a widget with OpenCode in place, an empty tab filled with existing widgets in a timelapse, and nine tab themes" width="880">
 </p>
 
-<p align="center"><sub>Six tabs · In-place agent · Timelapse build · Nine themes</sub></p>
+<p align="center"><a href="https://dynamic-dashboard-edouwarden.vercel.app/"><strong>▶&nbsp;&nbsp;Open the live demo</strong></a></p>
 
 # Dashboard
 
